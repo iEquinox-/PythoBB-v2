@@ -9,8 +9,7 @@
 			<span style="font-family: 'Raleway';color: #FFF;font-size: 30px;">PythoBB v2</span>
 		</div>
                 <div id="lst-mnu">
-			<a href="{[forumurl]}/login.py">Login</a>
-			<a href="{[forumurl]}/register.py">Register</a>
+                	{[userblock]}
 		</div>
 		<div id="container">
 			<div id="inner-body">
