@@ -1,9 +1,9 @@
 <html>
-    <head>
-  		<title>{[forumname]}</title>
-	  	<link href="http://fonts.googleapis.com/css?family=Raleway:100" rel="stylesheet" type="text/css">
-	  	{[styles]}
-    </head>
+	<head>
+		<title>{[forumname]}</title>
+		<link href="http://fonts.googleapis.com/css?family=Raleway:100" rel="stylesheet" type="text/css">
+		{[styles]}
+	</head>
 	<body>
 		<div id="back">
 			<span style="font-family: 'Raleway';color: #FFF;font-size: 30px;">PythoBB v2</span>
