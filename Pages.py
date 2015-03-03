@@ -2,8 +2,9 @@ import os,re,types,Render,Settings,Database
 
 class Pages():
 	def __init__(self):
-		self._Render = self.OpenPage
-		self._CSS    = self.RenderCSS
+		self._Render  = self.OpenPage
+		self._CSS     = self.RenderCSS
+		self._JS      = self.RenderJS
 		self.pageKeys = {
 			"index":             "index",
 			"userblock_guest":   "userblock_guest",
@@ -17,6 +18,9 @@ class Pages():
 
 	def RenderCSS(self, request, fname):
 		return Render.Render()._Page(content=str(open(Settings.BASEDIR+"/templates/styles/%s.css"%(fname)).read()), setCookies=None, setContentType="text/css")
+		
+	def RenderJS(self, request, fname):
+		return Render.Render()._Page(content=str(open(Settings.BASEDIR+"/templates/js/%s.js"%(fname)).read()), setCookies=None, setContentType="text/javascript")
 
 	def _FullRender(self, content=None, condit=None):
 		userblock,sid = "",None
@@ -42,7 +46,7 @@ class Pages():
 			
 	def _RenderForums(self):
 		render = ""
-		que  = Database.Database().Execute(query="SELECT * FROM pythobb_categories", variables=(), commit=False, doReturn=True, string=True)
+		que  = Database.Database().Execute(query="SELECT * FROM pythobb_categories", variables=(), commit=False, doReturn=True)
 		template = self.OpenPage(name="cat_display")
 		for x in que:
 			render += (template.replace(
@@ -57,7 +61,7 @@ class Pages():
 	def _RenderCategory(self, cid=None):
 		if(isinstance(cid, types.IntType))and(cid > 0):
 			render = ""
-			forums = Database.Database().Execute(query="SELECT * FROM pythobb_forums WHERE parent=?", variables=(1,), commit=False, doReturn=True, string=True)
+			forums = Database.Database().Execute(query="SELECT * FROM pythobb_forums WHERE parent=?", variables=(1,), commit=False, doReturn=True)
 			template = self.OpenPage(name="cat_display_forum")
 			for x in forums:
 				render += (template.replace(
