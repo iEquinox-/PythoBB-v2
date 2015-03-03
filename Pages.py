@@ -1,7 +1,7 @@
 
 class Pages():
 	def __init__(self):
-		self._Render = OpenPage
+		self._Render = self.OpenPage
 		self.pageKeys = {
 			"index": "index",
 			"userblock_guest": "",
