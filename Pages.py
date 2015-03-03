@@ -1,4 +1,4 @@
-import os,re,types,Render
+import os,re,types,Render,Settings
 
 class Pages():
 	def __init__(self):
@@ -25,9 +25,10 @@ class Pages():
 				else:
 					userblock,sid = "userblock_user",condit["sid_"]
 			tags = {
-				"forumname": "test forum",
+				"forumname": Settings.FORUMNAME,
 				"userblock": self._Render(name=userblock),
-				"forums": "test"
+				"forums": "test",
+				"forumurl": Settings.FORUMURL
 			}
 			c = re.findall("\{\[(.*?)\]\}", str(content))
 			for x in c:
