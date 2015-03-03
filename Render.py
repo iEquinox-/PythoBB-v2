@@ -15,16 +15,19 @@ class Render():
 		else:
 			return self.JSONDict[get]
 
-	def RenderPage(self, content=None, setCookies=None):
-		_RenderedContent = HttpResponse(content) if not isinstance(content, types.NoneType) else HttpResponse(self.RenderError(Error=1))
+	def RenderPage(self, content=None, setCookies=None, setContentType=None):
+		_RenderedContent = HttpResponse(content) if not isinstance(content, types.NoneType) else HttpResponse(self.RenderError(Error=1,Additional=content))
 		if(isinstance(setCookies, types.DictType))and(len(setCookies)>=1):
 			for c in setCookies:
 				_RenderedContent.set_cookie(str(c), setCookies[c])
+		if(not isinstance(setContentType, types.NoneType)):
+			_RenderedContent["content-type"] = setContentType
 		return _RenderedContent
 		
-	def RenderError(self, Error=None):
+	def RenderError(self, Error=None, Additional=None):
 		keys = {
-			1: "Missing or unloaded content: Render()._Page function."
+			1: "Missing or obstructed content: Render()._Page function."
 			}
 		if isinstance(Error, types.IntType):
-			return keys[Error]
+			e = keys[Error]
+			return (e+Additional) if Additional else e
