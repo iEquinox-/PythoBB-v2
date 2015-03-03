@@ -2,7 +2,7 @@ import Security,Render,Pages
 
 class Base:
 	def Home(self, request):
-		if request.COOKIES.has_key("SESSION_ID"):
+		if request.COOKIES.has_key("sid"):
 			user_status = True
 			sid = request.COOKIES["sid"]
 		else:
