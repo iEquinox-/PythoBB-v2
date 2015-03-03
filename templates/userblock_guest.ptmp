@@ -1,2 +1,2 @@
-			<a href="{[forumurl]}/login.py">Login</a>
-			<a href="{[forumurl]}/register.py">Register</a>
+			<a href="/login.py">Login</a>
+			<a href="/register.py">Register</a>
