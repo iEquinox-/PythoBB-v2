@@ -13,7 +13,7 @@ class Database():
 		execute    = cursor.execute
 		return {"connection":connection, "cursor":cursor, "execute":execute}
 		
-	def Execute(self, query=None, variables=None, commit=False, doReturn=False, string=False):
+	def Execute(self, query=None, variables=None, commit=False, doReturn=False, string=True):
 		if string:
 			if( not isinstance(query, types.NoneType) )and( isinstance(variables, types.TupleType) ):
 				try:
