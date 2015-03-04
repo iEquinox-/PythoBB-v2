@@ -1,6 +1,6 @@
 import os
 
-FORUMURL    = "http://127.0.0.1"
+FORUMURL    = "http://127.0.0.1:8000"
 FORUMNAME   = "PythoBB"
 TABLEPREFIX = "pythobb_"
 BASEDIR     = os.path.dirname(os.path.abspath(__file__))
