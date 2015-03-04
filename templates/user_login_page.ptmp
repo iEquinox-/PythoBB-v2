@@ -1,0 +1,36 @@
+<html>
+	<head>
+		<title>{[forumname]}</title>
+		<link href="http://fonts.googleapis.com/css?family=Raleway:100" rel="stylesheet" type="text/css">
+		<link href="{[forumurl]}/css/global.css" rel="stylesheet" type="text/css">
+		<script src="{[forumurl]}/js/jquery.js"></script>
+		<script src="{[forumurl]}/js/global.js"></script>
+		<script src="{[forumurl]}/js/login.js"></script>
+	</head>
+	<body>
+		<div id="back">
+			<span style="font-family: 'Raleway';color: #FFF;font-size: 30px;">PythoBB v2</span>
+		</div>
+                <div id="lst-mnu">
+                	{[userblock]}
+		</div>
+		<div id="container">
+			<div id="inner-body">
+				<form class="state-form" action="/login/_login/" method="post">
+					<div>
+						<div class="required-field username">Username</div>
+						<input type="text" name="Username" class="required username">
+					</div><br/><br/>
+					<div>
+						<div class="required-field password">Password</div>
+						<input type="password" name="Password" class="required password">
+					</div><br/><br/>
+					<input type="submit" value="Login" class="check_credentials">
+				</form>
+			</div>
+		</div>
+		<div id="cntr-foot">
+			Powered by PythoBB
+		</div>
+	</body>
+</html>
