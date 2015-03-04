@@ -55,7 +55,11 @@ class Pages():
 				"{[catdesc]}", x[2]
 				).replace(
 				"{[catforums]}", self._RenderCategory(cid=x[0])
-				) +"<br/>")
+				).replace(
+				"{[catid]}", str(x[0])
+				))
+			if len(que) > 1:
+				render += "<br/>"
 		return render
 		
 	def _RenderCategory(self, cid=None):
