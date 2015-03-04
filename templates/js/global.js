@@ -64,6 +64,17 @@ jQuery(document).ready(function($){
 		}
 	}
 	
+	$("input.check_credentials").on("click", function(){
+		if( $("input.username.required").val() == "" || $("input.password.required").val() == "" ) {
+			$("input.check_credentials").prop('disabled', true);
+			SendAlert('Both username and password fields must be filled in.');
+			setTimeout(function(){
+				$("input.check_credentials").prop('disabled', false);
+			}, 100);
+		}
+	});
+
+	
 	for(var c in cookieArray){
 		$("div#cat.catid-"+c).addClass("closed")
 	}	
