@@ -129,3 +129,59 @@ div#alert > div.part-right {
 	padding: 10px;
 	background: #222;
 }
+
+form.state-form {
+	background: #2E2E2E;
+	padding: 10px;
+	display: block;
+	width: 50%;
+	text-align: center;
+	margin: auto;
+	border: 1px solid #383838;
+	border-radius: 3px;
+	box-shadow: 0 0 10px -2px #000;
+}
+
+form.state-form > div {display:inline-block;}
+
+form.state-form > div > div.required-field {
+	display: inline-block;
+	background: linear-gradient(#111 -75%, #2ecc71 50%, #111 175%);
+	padding: 10px;
+	color: #FFF;
+	font-family: 'Raleway';
+	text-shadow: 0 0 0;
+	border-radius: 3px;
+	border: 1px solid #111;
+	font-size: 15px;
+	width: 90px;
+	text-align: center;
+}
+
+form.state-form > div > input.required {
+	display: inline-block;
+	background: linear-gradient(#111 -175%, #222 50%, #111 175%);
+	border-radius: 3px;
+	padding: 10px;
+	outline: none;
+	text-align: center;
+	font-family: 'Raleway';
+	font-size: 15px;
+	color: #2eec71;
+	text-shadow: 0 0 0;
+	border: 1px solid #111;
+	display: inherit;
+	width: 250px;
+}
+
+form.state-form > input[type="submit"] {
+	background: linear-gradient(#111 -75%, #2ecc71 50%, #111 175%);
+	padding: 10px 20px;
+	border: 1px solid #111;
+	border-radius: 3px;
+	color: #FFF;
+	font-family: 'Raleway';
+	font-size: 15px;
+	text-shadow: 0 0 0;
+	cursor: pointer;
+}
