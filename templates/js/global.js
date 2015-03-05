@@ -1,7 +1,10 @@
 jQuery(document).ready(function($){
 	var id = 1,
-		cookieArray = getCookie("catClosed").split(","),
 		url = "http://127.0.0.1:8000";
+		
+	if(getCookie("catClosed") != null){ var cookieArray = getCookie("catClosed").split(",")
+	} else { document.cookie = ("catClosed=; path=/"); var cookieArray = getCookie("catClosed").split(","); }
+	if(getCookie("allowAlerts") == null) { document.cookie = ("allowAlerts=;path=/") }
 		
 	function doRedirect(directory, time) {
 		setTimeout(function(){
@@ -49,7 +52,7 @@ jQuery(document).ready(function($){
 	function TriggerCat(cid, full) {
 		var cat = $("div#cat.catid-"+cid);
 		if(full == false){
-			cat.children(".cbody").fadeToggle(500); cat.children(".cfoot").fadeToggle(500);
+			cat.children(".catbody").slideToggle(500);
 			setTimeout(function(){
 				cat.toggleClass("closed");
 				if( cat.hasClass("closed") ){
