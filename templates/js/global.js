@@ -1,6 +1,14 @@
 jQuery(document).ready(function($){
 	var id = 1,
-		cookieArray = getCookie("catClosed").split(",");
+		cookieArray = getCookie("catClosed").split(","),
+		url = "http://127.0.0.1:8000";
+		
+	function doRedirect(directory, time) {
+		setTimeout(function(){
+			location.href = url + directory
+		}, time);
+	}
+		
 	/* Cookie function: https://docs.djangoproject.com/en/dev/ref/csrf/ */
 	function getCookie(name) {
 		var cookieValue = null;
@@ -73,7 +81,34 @@ jQuery(document).ready(function($){
 			}, 100);
 		}
 	});
+	
+	$("form.state-form").submit(function(event){
+		event.preventDefault();
+		if( $("input.username.required").val() != "" || $("input.password.required").val() != "" ) {
+			var action = $(this).attr("action");
+			$.ajax({type:"POST", url: action, data: {csrfmiddlewaretoken:getCookie("csrftoken"), Username:$("input.username.required").val(), Password:$("input.password.required").val()}, dataType: "json",
+				success: function(data) {
+					if(data.LoginAttempt === false) {
+						SendAlert("Wrong username or password.");
+					} else {
+						SendAlert("Login successful. Redirecting.");
+						document.cookie = ("sid="+data.LoginAttempt+"; path=/");
+						doRedirect("/",1000);
+					}
+				}, error: function(jqXHR, textStatus, error){
+					sendAlert("An error has occured. Please contact the forum administrator.");
+					console.log(textStatus);
+					console.log(error);
+				}
+			});
+		}
+	});
 
+	$("a.javascript.dologout").on("click", function(){
+		SendAlert("Logout successful.");
+		document.cookie = "sid=;"
+		doRedirect("/", 1000);
+	});
 	
 	for(var c in cookieArray){
 		$("div#cat.catid-"+c).addClass("closed")
