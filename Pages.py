@@ -10,7 +10,8 @@ class Pages():
 			"userblock_guest":   "userblock_guest",
 			"userblock_user":    "userblock_user",
 			"cat_display":       "cat_display",
-			"cat_display_forum": "cat_display_forum"
+			"cat_display_forum": "cat_display_forum",
+			"user_login_page":   "user_login_page",
 			}
 		
 	def OpenPage(self, name=None):
@@ -36,6 +37,10 @@ class Pages():
 				"forums": self._RenderForums(),
 				"forumurl": Settings.FORUMURL
 			}
+			
+			if(userblock == "userblock_user")and(sid != None):
+				tags["userblock"] = self._RenderUserblock(sid=sid)
+			
 			c = re.findall("\{\[(.*?)\]\}", str(content))
 			for x in c:
 				try:
@@ -43,6 +48,15 @@ class Pages():
 				except:
 					pass
 			return content
+			
+	def _RenderUserblock(self, sid=None):
+		if sid != "":
+			if not isinstance(sid, types.NoneType):
+				ub = self._Render(name="userblock_user")
+				us = Database.Database().Execute(query="SELECT * FROM pythobb_users WHERE uid=?", variables=(Database.Database().Execute(query="SELECT * FROM pythobb_user_data WHERE sessionid=?", variables=(sid,), commit=False, doReturn=True)[0][0],), commit=False, doReturn=True)[0][1]
+				return ub.replace("{[usernamelower]}", us.lower()).replace("{[username]}", us)
+		else:
+			return self._Render(name="userblock_guest")
 			
 	def _RenderForums(self):
 		render = ""
