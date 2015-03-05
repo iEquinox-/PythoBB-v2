@@ -15,7 +15,7 @@ class Pages():
 			}
 		
 	def OpenPage(self, name=None):
-		return str(open(Settings.BASEDIR+"/templates/%s.ptmp"%(self.pageKeys[name])).read())
+		return str(open(Settings.BASEDIR+"/templates/%s.html"%(self.pageKeys[name])).read())
 
 	def RenderCSS(self, request, fname):
 		return Render.Render()._Page(content=str(open(Settings.BASEDIR+"/templates/styles/%s.css"%(fname)).read()), setCookies=None, setContentType="text/css")
