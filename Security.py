@@ -19,17 +19,17 @@ class Security():
 			_string += random.choice(charset)
 		return _string
 
-	def Parse_Msg(self, message=None):
+	def Parse_Msg(self, content=None):
 		_Str = {1:[],0:[]}
-		if not isinstance(message, types.NoneType):
-			queue = re.findall("&lt;script&gt;(.*?)&lt;/script&gt;", cgi.escape(message))
+		if not isinstance(content, types.NoneType):
+			queue = re.findall("&lt;script&gt;(.*?)&lt;/script&gt;", cgi.escape(content))
 			if not len(queue) == 0:
 				for q in queue:
 					_Str[1].append(
 						"%s " % (time.time()) + q
 						)
-				message = cgi.escape(message)
-		return {"MSG":message, "STR":_Str}
+				content = cgi.escape(content)
+		return {"MSG":content, "STR":_Str}
 
 	def Hash_Text(self, verify=False, string=None, hash=None):
 		if(verify == True)and(not isinstance(string,types.NoneType))and(not isinstance(hash,types.NoneType)):
