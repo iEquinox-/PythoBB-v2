@@ -1,0 +1,42 @@
+<html>
+	<head>
+		<title>{[forumname]}</title>
+		<link href="http://fonts.googleapis.com/css?family=Raleway:100" rel="stylesheet" type="text/css">
+		<link href="{[forumurl]}/css/global.css" rel="stylesheet" type="text/css">
+		<script src="{[forumurl]}/js/jquery.js"></script>
+		<script src="{[forumurl]}/js/global.js"></script>
+	</head>
+	<body>
+		<div id="back">
+			<a style="font-family: 'Raleway';color: #FFF;font-size: 30px;text-decoration: none;" href="{[forumurl]}">{[forumname]}</a>
+		</div>
+                <div id="lst-mnu">
+                	{[userblock]}
+		</div>
+		<div id="container">
+			<div id="inner-body">
+				<form class="state-form register" action="/register/_register/" method="post" autocomplete="off">
+					<input type="hidden" name="csrfmiddlewaretoken" class="CSRFToken" value="None">
+					<div>
+						<div class="required-field username">Username</div>
+						<input type="text" name="Username" maxlength="25" class="required username">
+					</div><br/><br/>
+					<div>
+						<div class="required-field password">Email</div>
+						<input type="text" name="Email" class="required email">
+					</div><br/><br/>
+					<div>
+						<div class="required-field password">Password</div>
+						<input type="password" name="Password" class="required password">
+					</div><br/><br/>
+					<div>
+						<div class="required-field passwordre">Password</div>
+						<input type="password" name="retPassword" class="required passwordre" placeholder="(Again)">
+					</div><br/><br/>
+					<input type="submit" value="Register" class="register_credentials">
+				</form>
+			</div>
+		</div>
+		<div id="cntr-foot">Powered by PythoBB</div>
+	</body>
+</html>
