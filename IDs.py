@@ -4,6 +4,7 @@ class Values():
 	def __init__(self):
 		self._UID = self.getNewID(type="UID")
 		self._CID = self.getNewID(type="CID")
+		self._FID = self.getNewID(type="FID")
 		
 	def getNewID(self, type=None):
 		if not isinstance(type, types.NoneType):
