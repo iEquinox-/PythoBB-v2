@@ -1,4 +1,4 @@
-import os,re,types,Render,Settings,Database
+import re,types,Render,Settings,Database
 
 class Pages():
 	def __init__(self):
@@ -12,6 +12,7 @@ class Pages():
 			"cat_display":       "cat_display",
 			"cat_display_forum": "cat_display_forum",
 			"user_login_page":   "user_login_page",
+			"user_register_page":"user_register_page",
 			}
 		
 	def OpenPage(self, name=None):
@@ -86,5 +87,7 @@ class Pages():
 				"{[forumname]}",x[2]
 				).replace(
 				"{[forumdesc]}",x[3]
-				))
+				)).replace(
+				"{[forumid]}", str(x[0])
+				)
 			return render
