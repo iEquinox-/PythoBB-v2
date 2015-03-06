@@ -56,11 +56,11 @@ jQuery(document).ready(function($){
 			setTimeout(function(){
 				cat.toggleClass("closed");
 				if( cat.hasClass("closed") ){
-						cookieArray.push(cid);
-						document.cookie = ("catClosed=" + cookieArray.join() + ";")
+					cookieArray.push(cid);
+					document.cookie = ("catClosed=" + cookieArray.join() + ";");
 				} else {
-						cookieArray.splice(cookieArray.indexOf(cid),1)
-						document.cookie = ("catClosed=" + cookieArray.join() + ";")
+					cookieArray.splice(cookieArray.indexOf(cid),1);
+					document.cookie = ("catClosed=" + cookieArray.join() + ";");
 				}
 			}, 500);
 		} else {
@@ -87,25 +87,62 @@ jQuery(document).ready(function($){
 	
 	$("form.state-form").submit(function(event){
 		event.preventDefault();
-		if( $("input.username.required").val() != "" || $("input.password.required").val() != "" ) {
-			var action = $(this).attr("action");
-			$.ajax({type:"POST", url: action, data: {csrfmiddlewaretoken:getCookie("csrftoken"), Username:$("input.username.required").val(), Password:$("input.password.required").val()}, dataType: "json",
-				success: function(data) {
-					if(data.LoginAttempt === false) {
-						SendAlert("Wrong username or password.");
-					} else {
-						SendAlert("Login successful. Redirecting.");
-						document.cookie = ("sid="+data.LoginAttempt+"; path=/");
-						doRedirect("/",1000);
+		if( $(this).hasClass("login") ) {
+			if( $("input.username.required").val() != "" || $("input.password.required").val() != "" ) {
+				var action = $(this).attr("action");
+				$.ajax({type:"POST", url: action, data: {csrfmiddlewaretoken:getCookie("csrftoken"), Username:$("input.username.required").val(), Password:$("input.password.required").val()}, dataType: "json",
+					success: function(data) {
+						if(data.LoginAttempt === false) {
+							SendAlert("Wrong username or password.");
+						} else {
+							SendAlert("Login successful. Redirecting.");
+							document.cookie = ("sid="+data.LoginAttempt+"; path=/");
+							doRedirect("/",1000);
+						}
+					}, error: function(jqXHR, textStatus, error){
+						sendAlert("An error has occured. Please contact the forum administrator.");
+						console.log(textStatus);
+						console.log(error);
 					}
-				}, error: function(jqXHR, textStatus, error){
-					sendAlert("An error has occured. Please contact the forum administrator.");
-					console.log(textStatus);
-					console.log(error);
+				});
+			}
+		} else if( $(this).hasClass("register") ) {
+			if( $("input.username.required").val() == "" || $("input.password.required").val() == "" || $("input.passwordre.required").val() == "" || $("input.email.required").val() == "" ) {
+				SendAlert("Missing input.");
+			} else {
+				var action = $(this).attr("action");
+				if( $("input.password.required").val() == $("input.passwordre.required").val() ) {
+					$.ajax({type:"POST", url: action,
+						data: {
+							csrfmiddlewaretoken:getCookie("csrftoken"),
+							Username:$("input.username.required").val(),
+							Password:$("input.password.required").val(),
+							Email:$("input.email.required").val()},
+							dataType:"json",
+							success: function(data) {
+								console.log(data);
+								if (data.RegisterAttempt.register == true) {
+									SendAlert(data.RegisterAttempt.message);
+									document.cookie = "sid=" + data.RegisterAttempt.sid + "; path=/"
+									doRedirect("/", 1000)
+								} else {
+									SendAlert(data.RegisterAttempt.message);
+								}
+							},
+							error: function(jqXHR, textStatus, error){
+								SendAlert("An error has occured. Please contact the forum administrator.");
+								console.log(textStatus);
+								console.log(error);
+							}
+						});
+				} else {
+					SendAlert("Passwords do not match.");
 				}
-			});
-		}
+			}
+		}		
 	});
+	
+	// $("input.CSRFToken").attr('value', getCookie("csrftoken"));
 
 	$("a.javascript.dologout").on("click", function(){
 		SendAlert("Logout successful.");
