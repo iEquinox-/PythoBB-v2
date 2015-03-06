@@ -78,7 +78,7 @@ class Base:
 			return ip
 		IPADDR = getIP()
 		_RequestedData = {
-			"Username": request.POST["Username"],
+			"Username": Security.Security()._Parse(content=request.POST["Username"]),
 			"Password": request.POST["Password"],
 			"Email": request.POST["Email"]
 		}
