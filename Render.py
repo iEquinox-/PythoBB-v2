@@ -11,7 +11,7 @@ class Render():
 		if(isinstance(get, types.NoneType)):
 			self.JSONDict[variable] = ([c for c in data] if isinstance(data, types.ListType) else data) if not isinstance(data, types.NoneType) else boolean
 			if(complete == True):
-				return self.JSONDict
+				return json.dumps(self.JSONDict)
 		else:
 			return self.JSONDict[get]
 
