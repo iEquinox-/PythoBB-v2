@@ -1,4 +1,4 @@
-import re,types,Render,Settings,Database
+import re,types,Render,Settings,Database,Groups
 
 class Pages():
 	def __init__(self):
@@ -60,8 +60,8 @@ class Pages():
 		if sid != "":
 			if not isinstance(sid, types.NoneType):
 				ub = self._Render(name="userblock_user")
-				us = Database.Database().Execute(query="SELECT * FROM pythobb_users WHERE uid=?", variables=(Database.Database().Execute(query="SELECT * FROM pythobb_user_data WHERE sessionid=?", variables=(sid,), commit=False, doReturn=True)[0][0],), commit=False, doReturn=True)[0][1]
-				return ub.replace("{[usernamelower]}", us.lower()).replace("{[username]}", us)
+				us = Database.Database().Execute(query="SELECT * FROM pythobb_users WHERE uid=?", variables=(Database.Database().Execute(query="SELECT * FROM pythobb_user_data WHERE sessionid=?", variables=(sid,), commit=False, doReturn=True)[0][0],), commit=False, doReturn=True)[0]
+				return ub.replace("{[uid]}", str(us[0])).replace("{[username]}", us[1])
 		else:
 			return self._Render(name="userblock_guest")
 			
@@ -103,7 +103,7 @@ class Pages():
 			c = Database.Database().Execute(query="SELECT * FROM pythobb_users WHERE uid=?", variables=(uid,), commit=False, doReturn=True)
 			u = Database.Database().Execute(query="SELECT * FROM pythobb_user_data2 WHERE uid=?", variables=(uid,), commit=False, doReturn=True)
 			if len(c) > 0:
-				content = content.replace("{[username]}", c[0][1]).replace("{[uid]}", str(c[0][0])).replace("{[avatarimg]}", "<br/><img src=\"%s\">"%(u[0][2]))
+				content = content.replace("{[username]}", c[0][1]).replace("{[uid]}", str(c[0][0])).replace("{[avatarimg]}", "<img src=\"%s\">"%(u[0][2])).replace("{[usertitle]}", u[0][3]).replace("{[usergroup]}", Groups.Groups[u[0][4]]["Name"])
 			else:
-				content = "Invalid user."
+				content = "<div id=\"error\">Invalid user.</div>"
 		return content
