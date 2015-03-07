@@ -15,3 +15,10 @@ class Values():
 			}
 			value = len(Database.Database().Execute(query="SELECT * FROM pythobb_%s"%(typeTables[type]), variables=(), commit=False, doReturn=True))
 			return int(value+1)
+
+def VerifySID(sid=None):
+	if not isinstance(sid, types.NoneType):
+		if len(Database.Database().Execute(query="SELECT * FROM pythobb_user_data WHERE sessionid=?", variables=(sid,), commit=False, doReturn=True)) == 0:
+			return False
+		else:
+			return True
