@@ -4,7 +4,7 @@ jQuery(document).ready(function($){
 		
 	if(getCookie("catClosed") != null){ var cookieArray = getCookie("catClosed").split(",")
 	} else { document.cookie = ("catClosed=; path=/"); var cookieArray = getCookie("catClosed").split(","); }
-	if(getCookie("allowAlerts") == null) { document.cookie = ("allowAlerts=;path=/") }
+	if(getCookie("allowAlerts") == null) { document.cookie = ("allowAlerts=True;path=/") }
 		
 	function doRedirect(directory, time) {
 		setTimeout(function(){
@@ -32,16 +32,17 @@ jQuery(document).ready(function($){
 		var alert_content = "<div class=\"part-left\">!</div><div class=\"part-right\">" + string + "</div></div>";
 		if( getCookie("allowAlerts") == "True" ) {
 			if( $("div#alert").length ) {
+				$("div#alert").animate({marginBottom:"+=50px"}, 450)
 				if( $("div#alert").length < 5 ) {
-					$("body").append("<div id=\"alert\" class=\"alertid-" + id + "\" style=\"margin-bottom:" + 50 * $("div#alert").length + "px;\">" + alert_content);
+					$("body").append("<div id=\"alert\" class=\"alertid-" + id + "\"px;\">" + alert_content);
 				}
 			} else {
 				$("body").append("<div id=\"alert\" class=\"alertid-" + id + "\">" + alert_content);
 			}
 			var alert = $("div#alert.alertid-"+id);
-			alert.fadeIn(500); id += 1;
+			alert.slideDown(500); id += 1;
 			setTimeout(function(){
-				alert.fadeOut(500);
+				alert.slideUp(500);
 				setTimeout(function(){
 					alert.remove()
 				},500);
@@ -51,6 +52,7 @@ jQuery(document).ready(function($){
 	}
 	function TriggerCat(cid, full) {
 		var cat = $("div#cat.catid-"+cid);
+		var head = cat.children(".cname");
 		if(full == false){
 			cat.children(".catbody").slideToggle(500);
 			setTimeout(function(){
@@ -146,7 +148,7 @@ jQuery(document).ready(function($){
 
 	$("a.javascript.dologout").on("click", function(){
 		SendAlert("Logout successful.");
-		document.cookie = "sid=;"
+		document.cookie = "sid=; path=/"
 		doRedirect("/", 1000);
 	});
 	
