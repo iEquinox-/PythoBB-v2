@@ -6,17 +6,19 @@ class Pages():
 		self._CSS     = self.RenderCSS
 		self._JS      = self.RenderJS
 		self.pageKeys = {
-			"index":             "index",
-			"userblock_guest":   "userblock_guest",
-			"userblock_user":    "userblock_user",
-			"cat_display":       "cat_display",
-			"cat_display_forum": "cat_display_forum",
-			"user_login_page":   "user_login_page",
-			"user_register_page":"user_register_page",
+			"index":                "index",
+			"userblock_guest":      "userblock_guest",
+			"userblock_user":       "userblock_user",
+			"cat_display":          "cat_display",
+			"cat_display_forum":    "cat_display_forum",
+			"user_login_page":      "user_login_page",
+			"user_register_page":   "user_register_page",
+			"user_profile":         "user_profile",
+			"user_profile_content": "user_profile_content",
 			}
 		
 	def OpenPage(self, name=None):
-		return str(open(Settings.BASEDIR+"/templates/%s.html"%(self.pageKeys[name])).read())
+		return str(open(Settings.BASEDIR+"/templates/%s.html"%( self.pageKeys[ name ] )).read())
 
 	def RenderCSS(self, request, fname):
 		return Render.Render()._Page(content=str(open(Settings.BASEDIR+"/templates/styles/%s.css"%(fname)).read()), setCookies=None, setContentType="text/css")
@@ -24,7 +26,7 @@ class Pages():
 	def RenderJS(self, request, fname):
 		return Render.Render()._Page(content=str(open(Settings.BASEDIR+"/templates/js/%s.js"%(fname)).read()), setCookies=None, setContentType="text/javascript")
 
-	def _FullRender(self, content=None, condit=None):
+	def _FullRender(self, content=None, condit=None, extra=None):
 		userblock,sid = "",None
 		if not isinstance(content, types.NoneType):
 			if not isinstance(condit, types.NoneType):
@@ -36,11 +38,15 @@ class Pages():
 				"forumname": Settings.FORUMNAME,
 				"userblock": self._Render(name=userblock),
 				"forums": self._RenderForums(),
-				"forumurl": Settings.FORUMURL
+				"forumurl": Settings.FORUMURL,
+				"userprofile": None
 			}
 			
 			if(userblock == "userblock_user")and(sid != None):
 				tags["userblock"] = self._RenderUserblock(sid=sid)
+			if(not isinstance(extra, types.NoneType)):
+				if extra["GET"] == "userprofile":
+					tags["userprofile"] = self._RenderProfile(uid=extra["requesteduser"], content=self._Render(name="user_profile_content"))
 			
 			c = re.findall("\{\[(.*?)\]\}", str(content))
 			for x in c:
@@ -91,3 +97,13 @@ class Pages():
 				"{[forumid]}", str(x[0])
 				)
 			return render
+
+	def _RenderProfile(self, uid=None, content=None):
+		if(not isinstance(content, types.NoneType)) and not isinstance(uid, types.NoneType):
+			c = Database.Database().Execute(query="SELECT * FROM pythobb_users WHERE uid=?", variables=(uid,), commit=False, doReturn=True)
+			u = Database.Database().Execute(query="SELECT * FROM pythobb_user_data2 WHERE uid=?", variables=(uid,), commit=False, doReturn=True)
+			if len(c) > 0:
+				content = content.replace("{[username]}", c[0][1]).replace("{[uid]}", str(c[0][0])).replace("{[avatarimg]}", "<br/><img src=\"%s\">"%(u[0][2]))
+			else:
+				content = "Invalid user."
+		return content
