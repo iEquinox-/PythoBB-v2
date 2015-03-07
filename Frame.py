@@ -5,7 +5,7 @@ class Base:
 	def Home(self, request):
 		RotateCSRFToken(request)
 		if request.COOKIES.has_key("sid"):
-			if(request.COOKIES["sid"] != "")and(IDs.VerifySID(sid=request.COOKIES["sid"])==True):
+			if(IDs.VerifySID(sid=request.COOKIES["sid"])==True):
 				user_status,sid = True,request.COOKIES["sid"]
 			else:
 				user_status,sid = False,None
@@ -21,7 +21,7 @@ class Base:
 
 	def Login(self, request):
 		if request.COOKIES.has_key("sid"):
-			if(request.COOKIES["sid"] != "")and(IDs.VerifySID(sid=request.COOKIES["sid"])==True):
+			if(IDs.VerifySID(sid=request.COOKIES["sid"])==True):
 				return Render.Render()._Page(content="<script>location.href='%s';</script>"%(Settings.FORUMURL), setCookies=None)
 			else:
 				return Render.Render()._Page(content=Pages.Pages()._FullRender(
@@ -114,7 +114,7 @@ class Base:
 	
 	def MakeProfile(self, request, uid):
 		if request.COOKIES.has_key("sid"):
-			if(request.COOKIES["sid"] != "")and(IDs.VerifySID(sid=request.COOKIES["sid"])==True):
+			if(IDs.VerifySID(sid=request.COOKIES["sid"])==True):
 				user_status,sid = True,request.COOKIES["sid"]
 			else:
 				user_status,sid = False,None
