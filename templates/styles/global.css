@@ -198,7 +198,6 @@ div#profile {
 	border: 1px solid #383838;
 	border-radius: 3px;
 	box-shadow: 0 0 10px -2px #000;
-	text-align: left;
 }
 
 
@@ -218,5 +217,38 @@ div#profile > div.username > span {
 div#profile > img {
 	height: 75px;
 	width: 75px;
-	border-radius: 50%;
+	border-radius: 3px;
+	border: 1px solid #111;
+	background-color: #2ecc71;
+	box-shadow: 0 0 10px -2px #000;
+	margin-bottom: -15px;
+}
+
+div.mem-box {
+	background: linear-gradient(#111 -75%, #2ecc71 50%, #111 175%);
+	padding: 10px;
+	border: 1px solid #111;
+	border-radius: 3px;
+	font-family: 'Raleway';
+	color: #FFF;
+	font-size: 15px;
+	min-width: 115px;
+	margin: 0 15px 0 15px;
+	display: inline-block;
+	text-shadow: 0 0 0;
+	box-shadow: 0 0 10px -2px #000;
+}
+
+div#error {
+	background: #2E2E2E;
+	padding: 10px;
+	display: block;
+	text-align: center;
+	margin: auto;
+	border: 1px solid #383838;
+	border-radius: 3px;
+	box-shadow: 0 0 10px -2px #000;
+	font-family:'Raleway';
+	color:#FFF;
+	font-size: 20px;
 }
