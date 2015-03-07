@@ -103,8 +103,6 @@ class Base:
 				returnVars = {"message": "Registration successful. Redirecting.", "register":True, "sid":Token}
 			except Exception as e:
 				returnVars = None
-				#returnString = "An error has occured, please consult a site administrator."
-				#print e
 				returnString = str(e)
 			if( returnVars != None ):
 				JSON = Render.Render()._Page(content=str(Render.Render()._JSON(variable="RegisterAttempt", boolean=None, data=returnVars, complete=True)),
@@ -113,4 +111,14 @@ class Base:
 				JSON = Render.Render()._Page(content=str(Render.Render()._JSON(variable="RegisterAttempt", boolean=None, data={"message":returnString, "register":False, "sid":None}, complete=True)),
 				setCookies=None, setContentType="application/json")
 			return JSON
-			
+	
+	def MakeProfile(self, request, uid):
+		if request.COOKIES.has_key("sid"):
+			if(request.COOKIES["sid"] != ""):
+				user_status,sid = True,request.COOKIES["sid"]
+			else:
+				user_status,sid = False,None
+		else:
+			user_status,sid = False,None
+		return Render.Render()._Page(content=Pages.Pages()._FullRender(content=Pages.Pages()._Render("user_profile"),
+			condit={"user": user_status,"sid_": sid}, extra={"GET":"userprofile", "requesteduser":uid}), setCookies=None)
