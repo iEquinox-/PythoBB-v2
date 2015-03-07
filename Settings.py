@@ -3,6 +3,7 @@ import os
 FORUMURL    = "http://127.0.0.1:8000"
 FORUMNAME   = "PythoBB v2"
 TABLEPREFIX = "pythobb_"
+APIENABLED  = True
 
 # DON'T EDIT THE FOLLOWING SETTINGS
 
