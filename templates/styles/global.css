@@ -113,9 +113,7 @@ div#alert {
 	color: #FFF;
 	font-family: 'Raleway';
 	overflow: hidden;
-	border-radius: 3px;
 	border: 1px solid #111;
-	box-shadow: 0 0 10px #000;
 	display: none;
 }
 
@@ -221,23 +219,30 @@ div#profile > img {
 	border: 1px solid #111;
 	background-color: #2ecc71;
 	box-shadow: 0 0 10px -2px #000;
-	margin-bottom: -15px;
+	margin-bottom: -13px;
+}
+
+div#profile-break {
+	display: inline-block;
 }
 
 div.mem-box {
 	background: linear-gradient(#111 -75%, #2ecc71 50%, #111 175%);
-	padding: 10px;
+	padding: 8px;
 	border: 1px solid #111;
 	border-radius: 3px;
 	font-family: 'Raleway';
 	color: #FFF;
 	font-size: 15px;
 	min-width: 115px;
-	margin: 0 15px 0 15px;
 	display: inline-block;
+	margin: 0 0 0 5px;
 	text-shadow: 0 0 0;
 	box-shadow: 0 0 10px -2px #000;
+	text-align: center;
 }
+
+div#profile-break > div.mem-box:first-child {margin-bottom:5px;}
 
 div#error {
 	background: #2E2E2E;
