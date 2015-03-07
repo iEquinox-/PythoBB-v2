@@ -6,6 +6,6 @@
 # (default) will have administrator permissions.
 
 Groups = {
-		1: {"Name": "Administrator", "Description":"Site administrator."}
+		1: {"Name": "Administrator", "Description":"Site administrator."},
 		2: {"Name": "Default user", "Description":"Forum member"}
 	}
