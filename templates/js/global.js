@@ -32,8 +32,8 @@ jQuery(document).ready(function($){
 		var alert_content = "<div class=\"part-left\">!</div><div class=\"part-right\">" + string + "</div></div>";
 		if( getCookie("allowAlerts") == "True" ) {
 			if( $("div#alert").length ) {
-				$("div#alert").animate({marginBottom:"+=50px"}, 450)
 				if( $("div#alert").length < 5 ) {
+					$("div#alert").animate({marginBottom:"+=40px"}, 500)
 					$("body").append("<div id=\"alert\" class=\"alertid-" + id + "\"px;\">" + alert_content);
 				}
 			} else {
