@@ -1,5 +1,5 @@
 
-import Render,Database,types
+import Render,Database,types,Settings
 
 class API():
 	def __init__(self):
@@ -19,21 +19,29 @@ class API():
 		}
 		
 	def RenderJSON(self, request, type, requested):
-		if(type == "user")and(requested == "*"):
-			JSON = Render.Render()._JSON(variable="Error", boolean=None, data="Type 'User' cannot use the * request.", complete=True)
-		elif(type == "thread")and(requested == "*"):
-			JSON = Render.Render()._JSON(variable="Error", boolean=None, data="Type 'Thread' cannot use the * request.", complete=True)
-		else:
-			if type in self.types:
-				doData = self.dbkeys["query"][self.dbkeys[type]] if requested != "*" else (self.dbkeys["query"]["*"] % (self.dbkeys[type]) )
-				print doData
-				# NEVER COMMIT
-				vars = (requested,) if requested != "*" else ()
-				doData = self.SortData(data=Database.Database().Execute(query=doData, variables=vars, commit=False, doReturn=True), query=self.dbkeys[type] if requested != "*" else self.dbkeys[type]+"(*)")
-				JSON = Render.Render()._JSON(variable=type.capitalize() if requested != "*" else type.capitalize()+"(*)", boolean=None, data=doData, complete=True)
+		if Settings.APIENABLED == True:
+			if(type == "user")and(requested == "*"):
+				JSON = Render.Render()._JSON(variable="Error", boolean=None, data="Type 'User' cannot use the * request.", complete=True)
+			elif(type == "thread")and(requested == "*"):
+				JSON = Render.Render()._JSON(variable="Error", boolean=None, data="Type 'Thread' cannot use the * request.", complete=True)
 			else:
-				JSON = Render.Render()._JSON(variable="Error", boolean=None, data="Invalid type '%s'." % (type), complete=True)
-		return Render.Render()._Page(content=JSON, setCookies=None, setContentType="application/JSON")
+				if type in self.types:
+					doData = self.dbkeys["query"][self.dbkeys[type]] if requested != "*" else (self.dbkeys["query"]["*"] % (self.dbkeys[type]) )
+					print doData
+					# NEVER COMMIT
+					vars = (requested,) if requested != "*" else ()
+					doData = self.SortData(data=Database.Database().Execute(query=doData, variables=vars, commit=False, doReturn=True), query=self.dbkeys[type] if requested != "*" else self.dbkeys[type]+"(*)")
+					JSON = Render.Render()._JSON(variable=type.capitalize() if requested != "*" else type.capitalize()+"(*)", boolean=None, data=doData, complete=True)
+				else:
+					JSON = Render.Render()._JSON(variable="Error", boolean=None, data="Invalid type '%s'." % (type), complete=True)
+			return Render.Render()._Page(content=JSON, setCookies=None, setContentType="application/JSON")
+		else:
+			return Render.Render()._Page(content=Render.Render()._JSON(
+				variable="Error",
+				boolean=None,
+				data="The bulletin board administrator has disabled the usage of an API.",
+				complete=True)
+			,setCookies=None, setContentType="application/JSON")
 
 	def SortData(self, data=None, query=None):
 		newdata = None
