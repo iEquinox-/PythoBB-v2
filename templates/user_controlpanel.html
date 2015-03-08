@@ -1,0 +1,47 @@
+<html>
+	<head>
+		<title>{[forumname]}</title>
+		<link href="http://fonts.googleapis.com/css?family=Raleway:100" rel="stylesheet" type="text/css">
+		<link href="{[forumurl]}/css/global.css" rel="stylesheet" type="text/css">
+		<script src="{[forumurl]}/js/jquery.js"></script>
+		<script src="{[forumurl]}/js/global.js"></script>
+	</head>
+	<body>
+		<div id="back">
+			<a style="font-family: 'Raleway';color: #FFF;font-size: 30px;text-decoration: none;" href="{[forumurl]}">{[forumname]}</a>
+		</div>
+                <div id="lst-mnu">
+                	{[userblock]}
+		</div>
+		<div id="container">
+			<div id="inner-body">
+				<div id="content">
+					<div class="cp">
+						<form action="/member/usercp/_usercp/" method="post" autocomplete="off" class="usercp-form">
+							{[usercp_useravatar]}
+							<input type="hidden" name="csrfmiddlewaretoken" class="CSRFToken" value="None">
+							<div>
+								<div>
+									<div class="optional-field usertitle">Usertitle</div>
+									<input type="text" name="Usertitle" maxlength="25" class="form-optional usertitle">
+								</div><br/><br/>
+								<div>
+									<div class="optional-field avatar">Avatar</div>
+									<input type="text" name="Avatar" maxlength="500" class="form-optional avatar">
+								</div>
+							</div>
+							<div style="border-right:0;padding-left:0;">
+								<div>
+									<input type="submit" value="Update Profile" class="ucp-btn">
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="cntr-foot">
+			Powered by PythoBB
+		</div>
+	</body>
+</html>
