@@ -1,7 +1,7 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
 
-import Frame,Pages,Settings,API
+import Frame,Pages,Settings,API,Misc
 
 urlpatterns = patterns('',
 	url(r'^$', Frame.Base().Home, name='Index'),
@@ -12,7 +12,8 @@ urlpatterns = patterns('',
 	url(r'^member/profile/(?P<uid>\d+)/$', Frame.Base().MakeProfile, name='Profile'),
 	url(r'^member/usercp/$', Frame.Base().ControlPanel, name='User CP'),
 	url(r'^member/usercp/_usercp/$', Frame.Base().ProcessUserCP, name='User CP'),
+	url(r'^search/$', Misc.Search().doSearch, name='Search'),
 	url(r'^js/(?P<fname>\w+).js', Pages.Pages()._JS, name='JavaScript File'),
 	url(r'^css/(?P<fname>\w+).css$', Pages.Pages()._CSS, name='CSS File'),
-	url(r'^api/v1/(?P<type>\w+)/(?P<requested>\d+|\*)/$', API.API().RenderJSON, name='API')
+	url(r'^api/v1/(?P<type>\w+)/(?P<requested>\w+|\*)/$', API.API().RenderJSON, name='API')
 )
