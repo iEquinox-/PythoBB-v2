@@ -16,6 +16,7 @@ class Pages():
 			"user_profile":         "user_profile",
 			"user_profile_content": "user_profile_content",
 			"user_controlpanel":    "user_controlpanel",
+			"searchbox":            "searchbox",
 			}
 		
 	def OpenPage(self, name=None):
@@ -37,7 +38,7 @@ class Pages():
 					userblock,sid = "userblock_user",condit["sid_"]
 			tags = {
 				"forumname": Settings.FORUMNAME,
-				"userblock": self._Render(name=userblock),
+				"userblock": self._Render(name=userblock).replace("{[searchbox]}", self._Render(name="searchbox")),
 				"forums": self._RenderForums(),
 				"forumurl": Settings.FORUMURL,
 				"userprofile": None
@@ -62,9 +63,9 @@ class Pages():
 			if not isinstance(sid, types.NoneType):
 				ub = self._Render(name="userblock_user")
 				us = Database.Database().Execute(query="SELECT * FROM pythobb_users WHERE uid=?", variables=(Database.Database().Execute(query="SELECT * FROM pythobb_user_data WHERE sessionid=?", variables=(sid,), commit=False, doReturn=True)[0][0],), commit=False, doReturn=True)[0]
-				return ub.replace("{[uid]}", str(us[0])).replace("{[username]}", us[1])
+				return ub.replace("{[uid]}", str(us[0])).replace("{[username]}", us[1]).replace("{[searchbox]}", self._Render(name="searchbox"))
 		else:
-			return self._Render(name="userblock_guest")
+			return self._Render(name="userblock_guest").replace("{[searchbox]}", self._Render(name="searchbox"))
 			
 	def _RenderForums(self):
 		render = ""
