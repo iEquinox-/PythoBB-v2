@@ -55,10 +55,6 @@ class API():
 					newdata.append(
 						{c[0]:{"Name":c[1], "Description": c[2], "cid": c[0]}}
 					)
-			if query == "users":
-				x = Database.Database().Execute(query="SELECT * FROM pythobb_user_data2 WHERE uid=?", variables=(data[0][0],), commit=False, doReturn=True)
-				for c in data:
-					newdata = {"Username": c[1], "UID": c[0],"Avatar": x[0][2],"Usertitle": x[0][3],"GID": x[0][4]}
 			if query == "forums":
 				for c in data:
 					newdata = {"Name": c[2], "Description": c[3], "fid":c[0]}
@@ -68,4 +64,11 @@ class API():
 					newdata.append(
 						{"Name": c[2], "Description": c[3], "fid":c[0]}
 					)
+			if query == "users":
+				x = Database.Database().Execute(query="SELECT * FROM pythobb_user_data2 WHERE uid=?", variables=(data[0][0],), commit=False, doReturn=True)
+				for c in data:
+					newdata = {"Username": c[1], "UID": c[0],"Avatar": x[0][2],"Usertitle": x[0][3],"GID": x[0][4]}
+			if query == "threads":
+				for c in data:
+					newdata = {"Name": c[2], "Tags": c[3], "tid": c[0]}
 		return newdata
