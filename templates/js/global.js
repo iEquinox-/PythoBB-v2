@@ -177,7 +177,18 @@ jQuery(document).ready(function($){
 		}		
 	});
 	
-	// $("input.CSRFToken").attr('value', getCookie("csrftoken"));
+	$("input.CSRFToken").attr('value', getCookie("csrftoken"));
+	
+	$("form.search-form>input[type='submit']").on("click", function(){
+		var inp = $(this);
+		if( $("form.search-form>input[type='text']").val().length <= 3 ) {
+			inp.prop('disabled', true);
+			SendAlert("Your search query must be at least 4 characters in length, please refine your search.")
+			setTimeout(function(){
+				inp.prop('disabled', false);
+			}, 100);
+		}
+	});
 
 	$("a.javascript.dologout").on("click", function(){
 		SendAlert("Logout successful.");
