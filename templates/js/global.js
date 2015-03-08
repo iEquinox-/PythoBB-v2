@@ -1,10 +1,15 @@
 jQuery(document).ready(function($){
 	var id = 1,
-		url = "http://127.0.0.1:8000";
+		url = "http://127.0.0.1:8000",
+		deftime = 1000;
 		
 	if(getCookie("catClosed") != null){ var cookieArray = getCookie("catClosed").split(",")
 	} else { document.cookie = ("catClosed=; path=/"); var cookieArray = getCookie("catClosed").split(","); }
 	if(getCookie("allowAlerts") == null) { document.cookie = ("allowAlerts=True;path=/") }
+	
+	if(getCookie("allowAlerts") == "False") {
+		deftime = 0;
+	}
 		
 	function doRedirect(directory, time) {
 		setTimeout(function(){
@@ -99,7 +104,7 @@ jQuery(document).ready(function($){
 						} else {
 							SendAlert("Login successful. Redirecting.");
 							document.cookie = ("sid="+data.LoginAttempt+"; path=/");
-							doRedirect("/",1000);
+							doRedirect("/",deftime);
 						}
 					}, error: function(jqXHR, textStatus, error){
 						sendAlert("An error has occured. Please contact the forum administrator.");
@@ -126,7 +131,7 @@ jQuery(document).ready(function($){
 								if (data.RegisterAttempt.register == true) {
 									SendAlert(data.RegisterAttempt.message);
 									document.cookie = "sid=" + data.RegisterAttempt.sid + "; path=/"
-									doRedirect("/", 1000)
+									doRedirect("/", deftime)
 								} else {
 									SendAlert(data.RegisterAttempt.message);
 								}
@@ -149,7 +154,7 @@ jQuery(document).ready(function($){
 	$("a.javascript.dologout").on("click", function(){
 		SendAlert("Logout successful.");
 		document.cookie = "sid=; path=/"
-		doRedirect("/", 1000);
+		doRedirect("/", deftime);
 	});
 	
 	for(var c in cookieArray){
@@ -160,5 +165,18 @@ jQuery(document).ready(function($){
 		cid = $(this).parent().parent().attr('class').substring(6).split(" ")[0]
 		TriggerCat(cid, false);
 		SendAlert('Category toggled.')
+	});
+	
+	$("a.togglealerts[href='javascript:;']").on("click", function(){
+		var alert_switch = getCookie("allowAlerts");
+		if(alert_switch == "True") {
+			SendAlert('Alerts disabled.');
+			document.cookie = ("allowAlerts=False;path=/");
+			$(this).text("Enable Alerts");
+		} else {
+			document.cookie = ("allowAlerts=True;path=/");
+			SendAlert('Alerts enabled.');
+			$(this).text("Disable Alerts");
+		}
 	});
 });
