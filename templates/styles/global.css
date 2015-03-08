@@ -187,7 +187,7 @@ form.state-form > input[type="submit"] {
 	outline: none;
 }
 
-div#profile {
+div#content {
 	background: #2E2E2E;
 	padding: 10px;
 	display: block;
@@ -199,7 +199,7 @@ div#profile {
 }
 
 
-div#profile > div.username {
+div#content > div.username {
 	border-bottom: 1px solid #2ecc71;
 	padding: 10px;
 	box-shadow: 0px 8px 10px -10px #2ecc71;
@@ -208,11 +208,11 @@ div#profile > div.username {
 	font-family: 'Raleway';
 }
 
-div#profile > div.username > span {
+div#content > div.username > span {
 	float: right;
 }
 
-div#profile > img {
+div#content > img {
 	height: 75px;
 	width: 75px;
 	border-radius: 3px;
@@ -220,6 +220,24 @@ div#profile > img {
 	background-color: #2ecc71;
 	box-shadow: 0 0 10px -2px #000;
 	margin-bottom: -13px;
+}
+
+div#content a {
+	padding: 5px 10px;
+	border: 1px solid #111;
+	border-radius: 3px;
+	box-shadow: inset 0px 5px 10px -5px #000, inset 0px -5px 10px -5px #000, 0 0 5px -2px #000;
+	background-image: linear-gradient(#111 -75%, #2ecc71 50%, #111 175%);
+	color: #FFF;
+	font-family: 'Raleway';
+	text-transform: uppercase;
+	text-shadow: 0 0 0;
+	text-decoration: none;
+	font-size: 15px;
+}
+
+div#content > div.cp {
+	text-align: left;
 }
 
 div#profile-break {
