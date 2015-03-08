@@ -294,3 +294,31 @@ img.userimg {
 	border: 1px solid #111;
 	box-shadow: 0px 0px 10px -2px #111;
 }
+
+form.search-form {
+	float: right;
+	margin-top: -8px;
+	box-shadow: 0 0 10px -2px #000;
+}
+
+form.search-form > input[type="text"] {
+	border: 1px solid #111;
+	padding: 10px;
+	background: #222;
+	border-radius: 3px 0 0 3px;
+	color: #2eec71;
+	outline: none;
+}
+
+form.search-form > input[type="submit"] {
+	border: 1px solid #111;
+	padding: 10px;
+	border-radius: 0 3px 3px 0;
+	border-left: none;
+	color: #FFF;
+	background: linear-gradient(#111 -75%, #2ecc71 50%, #111 175%);
+	font-family: 'Raleway';
+	text-shadow: 0 0 0;
+	font-size: 13px;
+	text-transform: uppercase;
+}
