@@ -15,6 +15,7 @@ class Pages():
 			"user_register_page":   "user_register_page",
 			"user_profile":         "user_profile",
 			"user_profile_content": "user_profile_content",
+			"user_controlpanel":    "user_controlpanel",
 			}
 		
 	def OpenPage(self, name=None):
@@ -107,3 +108,12 @@ class Pages():
 			else:
 				content = "<div id=\"error\">Invalid user.</div>"
 		return content
+
+	def _RenderUserCP(self, content=None, condit=None):
+		uid = Database.Database().Execute(query="SELECT * FROM pythobb_user_data WHERE sessionid=?", variables=(condit["sid_"],), commit=False, doReturn=True)[0][0]
+		udt = Database.Database().Execute(query="SELECT * FROM pythobb_user_data2 WHERE uid=?", variables=(uid,), commit=False, doReturn=True)
+		return self._FullRender(
+			content=content.replace(
+				"{[usercp_useravatar]}", "<img src=\"%s\" class=\"userimg\" style=\"float:left;margin-top: 10px;margin-right: 5px;margin-left:5px;\">"%(udt[0][2])
+				),
+			condit=condit)
