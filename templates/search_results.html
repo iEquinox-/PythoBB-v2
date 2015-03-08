@@ -1,0 +1,34 @@
+<html>
+	<head>
+		<title>{[forumname]}</title>
+		<link href="http://fonts.googleapis.com/css?family=Raleway:100" rel="stylesheet" type="text/css">
+		<link href="{[forumurl]}/css/global.css" rel="stylesheet" type="text/css">
+		<script src="{[forumurl]}/js/jquery.js"></script>
+		<script src="{[forumurl]}/js/global.js"></script>
+	</head>
+	<body>
+		<div id="back">
+			<a style="font-family: 'Raleway';color: #FFF;font-size: 30px;text-decoration: none;" href="{[forumurl]}">{[forumname]}</a>
+		</div>
+                <div id="lst-mnu">
+                	{[userblock]}
+		</div>
+		<div id="container">
+			<div id="inner-body">
+				<div id="content">
+					<div class="header">Threads</div>
+					<div class="follow-head">{[results->threads]}</div>
+					<div class="header">Thread Tags</div>
+					<div class="follow-head">{[results->tags]}</div>
+					<div class="header">Posts</div>
+					<div class="follow-head">{[results->posts]}</div>
+					<div class="header">Users</div>
+					<div class="follow-head">{[results->users]}</div>
+				</div>
+			</div>
+		</div>
+		<div id="cntr-foot">
+			Powered by PythoBB
+		</div>
+	</body>
+</html>
