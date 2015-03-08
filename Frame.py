@@ -12,7 +12,7 @@ class Base:
 		else:
 			user_status,sid = False,None
 		return Render.Render()._Page(content=Pages.Pages()._FullRender(
-				content=Pages.Pages()._Render(name=Pages.Pages().pageKeys["index"]),
+				content=Pages.Pages()._Render(name="index"),
 				condit = {
 					"user": user_status,
 					"sid_": sid
@@ -122,3 +122,45 @@ class Base:
 			user_status,sid = False,None
 		return Render.Render()._Page(content=Pages.Pages()._FullRender(content=Pages.Pages()._Render("user_profile"),
 			condit={"user": user_status,"sid_": sid}, extra={"GET":"userprofile", "requesteduser":uid}), setCookies=None)
+
+	def ControlPanel(self, request):
+		if request.COOKIES.has_key("sid"):
+			if(IDs.VerifySID(sid=request.COOKIES["sid"])==True):
+				user_status,sid = True,request.COOKIES["sid"]
+			else:
+				return Render.Render()._Page(content="<script>location.href='%s';</script>"%(Settings.FORUMURL), setCookies=None)
+		else:
+			return Render.Render()._Page(content="<script>location.href='%s';</script>"%(Settings.FORUMURL), setCookies=None)
+		return Render.Render()._Page(content=Pages.Pages()._RenderUserCP(
+				content=Pages.Pages()._Render(name="user_controlpanel"),
+				condit = {
+					"user": user_status,
+					"sid_": sid
+					}
+			), setCookies=None)
+			
+	def ProcessUserCP(self, request):
+		reqData = {
+			"Usertitle": request.POST["Usertitle"],
+			"Avatar": request.POST["AvatarURL"]
+		}
+		print request.COOKIES
+		if request.COOKIES.has_key("sid"):
+			if(IDs.VerifySID(sid=request.COOKIES["sid"])==True):
+				user_status,sid = True,request.COOKIES["sid"]
+			else:
+				return Render.Render()._Page(content="<script>location.href='%s';</script>"%(Settings.FORUMURL), setCookies=None)
+		else:
+			return Render.Render()._Page(content="<script>location.href='%s';</script>"%(Settings.FORUMURL), setCookies=None)
+		try:
+			uid = Database.Database().Execute(query="SELECT * FROM pythobb_user_data WHERE sessionid=?", variables=(sid,), commit=False, doReturn=True)[0][0]
+			for c in reqData:
+				if(c == "Usertitle")and(reqData[c]!=""):
+					Database.Database().Execute(query="UPDATE pythobb_user_data2 SET usertitle=? WHERE uid=?", variables=(str(reqData["Usertitle"]),uid,), commit=True)
+				if(c == "Avatar")and(reqData[c]!=""):
+					Database.Database().Execute(query="UPDATE pythobb_user_data2 SET avatar=? WHERE uid=?", variables=(str(reqData["Avatar"]),uid,), commit=True)
+			JSON = Render.Render()._Page(content=Render.Render()._JSON(variable="Updated", boolean=True, data=None, complete=True), setCookies=None, setContentType="application/json")
+		except Exception as e:
+			print str(e)
+			JSON = Render.Render()._Page(content=Render.Render()._JSON(variable="Updated", boolean=None, data=[False, "An error occured."], complete=True), setCookies=None, setContentType="application/json")
+		return JSON
