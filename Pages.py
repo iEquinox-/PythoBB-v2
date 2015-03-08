@@ -1,4 +1,4 @@
-import re,types,Render,Settings,Database,Groups
+import re,types,Render,Settings,Database,Groups,Misc
 
 class Pages():
 	def __init__(self):
@@ -17,6 +17,7 @@ class Pages():
 			"user_profile_content": "user_profile_content",
 			"user_controlpanel":    "user_controlpanel",
 			"searchbox":            "searchbox",
+			"search_results":       "search_results",
 			}
 		
 	def OpenPage(self, name=None):
@@ -118,3 +119,16 @@ class Pages():
 				"{[usercp_useravatar]}", "<img src=\"%s\" class=\"userimg\" style=\"float:left;margin-top: 10px;margin-right: 5px;margin-left:5px;\">"%(udt[0][2])
 				),
 			condit=condit)
+
+	def _RenderSearchResults(self, content=None, results=None, condit=None):
+		page = self._FullRender(content=content, condit=condit)
+		page = page.replace(
+			"{[results->threads]}", Misc.Sort().Array(array=results["threads"], type="searchresult")
+			).replace(
+			"{[results->tags]}", Misc.Sort().Array(array=results["tags"], type="searchresult")
+			).replace(
+			"{[results->posts]}", Misc.Sort().Array(array=results["posts"], type="searchresult")
+			).replace(
+			"{[results->users]}", Misc.Sort().Array(array=results["members"], type="searchresult")
+			)
+		return Render.Render()._Page(content=page, setCookies=None)
