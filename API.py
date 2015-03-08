@@ -13,7 +13,7 @@ class API():
 				"*": "SELECT * FROM pythobb_%s",
 				"users": "SELECT * FROM pythobb_users WHERE uid=?",
 				"categories": "SELECT * FROM pythobb_categories WHERE cid=?",
-				"forum": "SELECT * FROM pythobb_forums WHERE fid=?",
+				"forums": "SELECT * FROM pythobb_forums WHERE fid=?",
 				"threads": "SELECT * FROM pythobb_threads WHERE tid=?"
 			}
 		}
@@ -51,7 +51,6 @@ class API():
 					newdata = {"Name": c[1], "Description": c[2], "cid": c[0]}
 			if query == "categories(*)":
 				newdata = []
-				print data
 				for c in data:
 					newdata.append(
 						{c[0]:{"Name":c[1], "Description": c[2], "cid": c[0]}}
@@ -60,4 +59,13 @@ class API():
 				x = Database.Database().Execute(query="SELECT * FROM pythobb_user_data2 WHERE uid=?", variables=(data[0][0],), commit=False, doReturn=True)
 				for c in data:
 					newdata = {"Username": c[1], "UID": c[0],"Avatar": x[0][2],"Usertitle": x[0][3],"GID": x[0][4]}
+			if query == "forums":
+				for c in data:
+					newdata = {"Name": c[2], "Description": c[3], "fid":c[0]}
+			if query == "forums(*)":
+				newdata = []
+				for c in data:
+					newdata.append(
+						{"Name": c[2], "Description": c[3], "fid":c[0]}
+					)
 		return newdata
