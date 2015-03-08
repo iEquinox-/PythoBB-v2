@@ -142,9 +142,19 @@ form.state-form {
 	box-shadow: 0 0 10px -2px #000;
 }
 
-form.state-form > div {display:inline-block;}
+form.state-form > div,
+form.usercp-form > div,
+form.usercp-form > div > div {display:inline-block;}
 
-form.state-form > div > div.required-field {
+form.usercp-form  > div {
+	padding: 10px;
+	border-right: 1px solid #222;
+	margin-left: 5px;
+	margin-top: 5px;
+}
+
+form.state-form > div > div.required-field,
+form.usercp-form > div > div > div.optional-field {
 	display: inline-block;
 	background: linear-gradient(#111 -75%, #2ecc71 50%, #111 175%);
 	padding: 10px;
@@ -158,8 +168,8 @@ form.state-form > div > div.required-field {
 	text-align: center;
 }
 
-form.state-form > div > input.required {
-	display: inline-block;
+form.state-form > div > input.required,
+form.usercp-form > div > div > input.form-optional {
 	background: linear-gradient(#111 -175%, #222 50%, #111 175%);
 	border-radius: 3px;
 	padding: 10px;
@@ -174,7 +184,8 @@ form.state-form > div > input.required {
 	width: 250px;
 }
 
-form.state-form > input[type="submit"] {
+form.state-form > input[type="submit"],
+form.usercp-form > div > div > input[type="submit"] {
 	background: linear-gradient(#111 -75%, #2ecc71 50%, #111 175%);
 	padding: 10px 20px;
 	border: 1px solid #111;
@@ -217,7 +228,7 @@ div#content > img {
 	width: 75px;
 	border-radius: 3px;
 	border: 1px solid #111;
-	background-color: #2ecc71;
+	background-color: #111;
 	box-shadow: 0 0 10px -2px #000;
 	margin-bottom: -13px;
 }
@@ -274,4 +285,12 @@ div#error {
 	font-family:'Raleway';
 	color:#FFF;
 	font-size: 20px;
+}
+
+img.userimg {
+	height: 100px;
+	width: 100px;
+	border-radius: 50%;
+	border: 1px solid #111;
+	box-shadow: 0px 0px 10px -2px #111;
 }
