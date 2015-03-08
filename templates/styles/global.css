@@ -233,7 +233,7 @@ div#content > img {
 	margin-bottom: -13px;
 }
 
-div#content a {
+div#content a:not(.prot) {
 	padding: 5px 10px;
 	border: 1px solid #111;
 	border-radius: 3px;
@@ -242,6 +242,14 @@ div#content a {
 	color: #FFF;
 	font-family: 'Raleway';
 	text-transform: uppercase;
+	text-shadow: 0 0 0;
+	text-decoration: none;
+	font-size: 15px;
+}
+
+div#content a.prot {
+	color: #FFF;
+	font-family: 'Raleway';
 	text-shadow: 0 0 0;
 	text-decoration: none;
 	font-size: 15px;
@@ -321,4 +329,31 @@ form.search-form > input[type="submit"] {
 	text-shadow: 0 0 0;
 	font-size: 13px;
 	text-transform: uppercase;
+	outline: none;
+}
+
+div.header {
+	background: linear-gradient(#111 -75%, #2ecc71 50%, #111 175%);
+	padding: 10px;
+	text-align: left;
+	font-family: 'Raleway';
+	text-shadow: 0 0 0;
+	color: #FFF;
+	border: 1px solid #111;
+	border-radius: 3px 3px 0 0;
+}
+
+div.follow-head > div.result {
+	background: #222;
+	padding: 10px;
+	text-align: left;
+	color: #FFF;
+	font-family: 'Raleway';
+	border: 1px solid #111;
+	border-top: 0;
+}
+
+div.follow-head > div.result:last-child {
+	border-radius: 0 0 3px 3px;
+	margin: 0 0 5px 0;
 }
