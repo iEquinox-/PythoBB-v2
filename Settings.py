@@ -11,7 +11,7 @@ BASEDIR     = os.path.dirname(os.path.abspath(__file__))
 TABLESCHEMA = """
 			CREATE TABLE pythobb_categories (cid int, name text, desc text)
 			CREATE TABLE pythobb_forums (fid int, parent int, name text, desc text)
-			CREATE TABLE pythobb_threads (tid int, parent int, name text, tags text)
+			CREATE TABLE pythobb_threads (tid int, parent int, name text, tags text, post text, cinf text)
 			CREATE TABLE pythobb_posts (pid int, parent int, content text, uid int)
 			CREATE TABLE pythobb_users (uid int, username text, salt text, password text)
 			CREATE TABLE pythobb_user_data (uid int, sessionid text, ipaddr text)
