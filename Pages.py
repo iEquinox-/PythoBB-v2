@@ -18,6 +18,8 @@ class Pages():
 			"user_controlpanel":    "user_controlpanel",
 			"searchbox":            "searchbox",
 			"search_results":       "search_results",
+			"forum_display":        "forum_display",
+			"forum_display_forum":  "forum_display_forum",
 			}
 		
 	def OpenPage(self, name=None):
@@ -40,7 +42,7 @@ class Pages():
 			tags = {
 				"forumname": Settings.FORUMNAME,
 				"userblock": self._Render(name=userblock).replace("{[searchbox]}", self._Render(name="searchbox")),
-				"forums": self._RenderForums(),
+				"categories": self._RenderForums(),
 				"forumurl": Settings.FORUMURL,
 				"userprofile": None
 			}
@@ -123,12 +125,32 @@ class Pages():
 	def _RenderSearchResults(self, content=None, results=None, condit=None):
 		page = self._FullRender(content=content, condit=condit)
 		page = page.replace(
-			"{[results->threads]}", Misc.Sort().Array(array=results["threads"], type="searchresult")
+			"{[results->threads]}", Misc.Sort().Array(array=results["threads"], type="searchresult", syn="threads")
 			).replace(
-			"{[results->tags]}", Misc.Sort().Array(array=results["tags"], type="searchresult")
+			"{[results->tags]}", Misc.Sort().Array(array=results["tags"], type="searchresult", syn="tags", extr={"tag":results["query"]})
 			).replace(
-			"{[results->posts]}", Misc.Sort().Array(array=results["posts"], type="searchresult")
+			"{[results->posts]}", Misc.Sort().Array(array=results["posts"], type="searchresult", syn="posts")
 			).replace(
-			"{[results->users]}", Misc.Sort().Array(array=results["members"], type="searchresult")
+			"{[results->users]}", Misc.Sort().Array(array=results["members"], type="searchresult", syn="users")
 			)
 		return Render.Render()._Page(content=page, setCookies=None)
+
+	def _RenderForum(self, content=None, condit=None, fid=None):
+		page = self._FullRender(content=content, condit=condit)
+		_for = Database.Database().Execute(query="SELECT * FROM pythobb_forums WHERE fid=?", variables=(fid,), commit=False, doReturn=True)[0]
+		page = page.replace("{[forums]}", self._RenderForumThreads(content=self._Render(name="forum_display_forum"), fid=fid)).replace(
+			"{[forumname]}", _for[2]
+			).replace(
+			"{[forumdesc]}", _for[3]
+			).replace("{[fid]}", str(fid)).replace("{[forumurl]}", Settings.FORUMURL)
+		return Render.Render()._Page(content=page, setCookies=None)
+
+	def _RenderForumThreads(self, content=None, fid=None):
+		repl = ""
+		threads = Database.Database().Execute(query="SELECT * FROM pythobb_threads WHERE parent=?", variables=(fid,), commit=False, doReturn=True)
+		if len(threads) == 0:
+			repl += "<div class=\"forum-body\">There are no threads in this forum.</div>"
+		else:
+			for c in threads:
+				repl += "<div class=\"forum-body\"><a href=\"%s/thread/%s/\">%s</a> <span>%s replies</span></div>" % (Settings.FORUMURL, c[0], c[2], str(len(Database.Database().Execute(query="SELECT * FROM pythobb_posts WHERE parent=?", variables=(c[0],), commit=False, doReturn=True))))
+		return content.replace("{[forum_threads]}", repl)
