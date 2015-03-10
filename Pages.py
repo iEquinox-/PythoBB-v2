@@ -20,6 +20,8 @@ class Pages():
 			"search_results":       "search_results",
 			"forum_display":        "forum_display",
 			"forum_display_forum":  "forum_display_forum",
+			"thread_display":       "thread_display",
+			"post_display":         "thread_display_post",
 			}
 		
 	def OpenPage(self, name=None):
@@ -154,3 +156,48 @@ class Pages():
 			for c in threads:
 				repl += "<div class=\"forum-body\"><a href=\"%s/thread/%s/\">%s</a> <span>%s replies</span></div>" % (Settings.FORUMURL, c[0], c[2], str(len(Database.Database().Execute(query="SELECT * FROM pythobb_posts WHERE parent=?", variables=(c[0],), commit=False, doReturn=True))))
 		return content.replace("{[forum_threads]}", repl)
+
+	def _RenderThread(self, content=None, condit=None, tid=None):
+		def getThreadName(tid=0):
+			return Database.Database().Execute(query="SELECT * FROM pythobb_threads WHERE tid=?", variables=(tid,), commit=False, doReturn=True)[0][2]
+		page = self._FullRender(content=content, condit=condit)
+		if condit["user"] == True:
+			newpost = """<a href="javascript:;" class="makenewpost">New Post</a>"""
+		else:
+			newpost = ""
+		page = page.replace("{[threadname]}", getThreadName(tid=tid)).replace("{[newpost]}", newpost)
+		return Render.Render()._Page(content=page.replace("{[posts]}", self._RenderPosts(tid=tid)), setCookies=None)
+		
+	def _RenderPosts(self, tid=0):
+		parent_Post = Database.Database().Execute(query="SELECT * FROM pythobb_threads WHERE tid=?", variables=(tid,), commit=False, doReturn=True)[0]
+		pPost = {"post": parent_Post[4], "poster": parent_Post[5].split(":")[0]}
+		posts       = Database.Database().Execute(query="SELECT * FROM pythobb_posts WHERE parent=?", variables=(tid,), commit=False, doReturn=True)
+		post_String = ""
+		pid         = parent_Post[5].split(":")[2]
+		getAvatar   = Database.Database().Execute(query="SELECT * FROM pythobb_user_data2 WHERE uid=?", variables=(Database.Database().Execute(query="SELECT * FROM pythobb_users WHERE username=?", variables=(pPost["poster"],), commit=False, doReturn=True)[0][0],), commit=False, doReturn=True)[0][2]
+		if getAvatar != "":
+			getAvatar = "<br/><img src=\"" + getAvatar + "\" class=\"userimg\" style=\"height:75px;width:75px;margin-top:10px;\">"
+		post_String += self._Render(name="post_display").replace(
+			"{[username]}", pPost["poster"]
+		).replace(
+			"{[content]}", pPost["post"]
+		).replace(
+			"{[postoptions]}", self._PostOpt(pid=pid)
+		).replace(
+			"{[useravatar]}", getAvatar
+		)
+		return post_String
+		
+	def _PostOpt(self, pid):
+		links = {"Quote": ["javascript:;"], "Like":["javascript:;","counter-p1","<div class=\"counter-p2\">%s</div>"]}; link  = ""
+		def getLikes(pid=0):
+			num = Database.Database().Execute(query="SELECT likes FROM pythobb_thread_misc WHERE pid=?", variables=(pid,), commit=False, doReturn=True)[0]
+			print str(num)
+			return num[0]
+		for c in links:
+			if c == "Like":
+				extra = [links["Like"][1], links["Like"][2]%(str(getLikes(pid=pid)))]
+			else:
+				extra = ["",""]
+			link += "<a href=\"{0}\" id=\"pid-{2}\" class=\"{1} {3}\">{1}</a>{4}".format(links[c][0], c, str(pid), extra[0], extra[1])
+		return link
