@@ -77,6 +77,16 @@ jQuery(document).ready(function($){
 		}
 	}
 	
+	function pullPost() {
+		if($("div.makepost").css("display") != "block") {
+			$("div.makepost").slideDown(500);
+			$("html,body").animate({scrollTop: $("div.makepost").offset().top },500);
+		} else {
+			$("div.makepost").slideUp(500);
+			$("html,body").animate({scrollTop: 0 },500);
+		}
+	}
+	
 	$("input.check_credentials").on("click", function(){
 		if( $("input.username.required").val() == "" || $("input.password.required").val() == "" ) {
 			$("input.check_credentials").prop('disabled', true);
@@ -175,7 +185,7 @@ jQuery(document).ready(function($){
 				}
 			}
 		}		
-	});
+	});	
 	
 	$("input.CSRFToken").attr('value', getCookie("csrftoken"));
 	
@@ -205,4 +215,65 @@ jQuery(document).ready(function($){
 		TriggerCat(cid, false);
 		SendAlert('Category toggled.')
 	});
+	
+	$("a[href='javascript:;'].makenewpost").on("click", function(){
+		pullPost();
+	});
+	
+	$("a[href='javascript:;'].Like").on("click", function(){
+		act = $(this).attr("id").substring(4,5),
+			counter = $(this).parent().children(".counter-p2"),
+			likes   = parseInt(counter.text());
+		$.ajax({type:"POST", url:url+"/action/", data:{
+			csrfmiddlewaretoken:getCookie("csrftoken"),
+			action:"like",
+			sid: getCookie("sid"),
+			pid:act.toString()
+			}, dataType:"json",
+			success: function (data){
+				if(data.Updated[0] == true){
+					if(data.Updated[1] == "like"){
+						likes += 1;
+					} else {
+						likes -= 1;
+					}
+					counter.text(likes);
+				}
+			},
+			error: function(jqXHR, textStatus, error) {
+				SendAlert("An error has occured. Please contact the forum administrator.");
+				console.log(textStatus);
+				console.log(error);
+			}
+		});
+	});
+	
+	$("div.newpostopt>a[href='javascript:;']").on("click", function(){
+		cl = $(this).attr("class");
+		pre = $("div.makepost>textarea").val();
+		if( cl == "b" ) {
+			$("div.makepost>textarea").val(  pre + " [b]Bold text[/b] " )
+		} else if( cl == "i" ) {
+			$("div.makepost>textarea").val(  pre + " [i]Italic text[/i] " )
+		} else if ( cl == "img") {
+			$("div.makepost>textarea").val(  pre + " [img]Image url[/img] " )
+		} else if ( cl == "post" ) {
+			/* TO BE COMPLETED */
+		}
+	});
+	
+	$("div.post-opt > a[href='javascript:;'].Quote").on("click", function(){
+		pid = $(this).attr("id").substring(4,5);
+		if( $("div.makepost").css("display") != "block" ) {
+			pullPost();
+		}
+		pre = $("div.makepost>textarea").val();
+		$("div.makepost>textarea").val(  pre + " [quote=\""+pid+"\"] " )
+	});
+	
+	$("div.abvpostopt > a[href='javascript:;'].cancelpost").on("click", function(){
+		$("div.makepost>textarea").val("");
+		setTimeout(function(){pullPost();}, 200);
+	});
+	
 });
