@@ -16,4 +16,5 @@ TABLESCHEMA = """
 			CREATE TABLE pythobb_users (uid int, username text, salt text, password text)
 			CREATE TABLE pythobb_user_data (uid int, sessionid text, ipaddr text)
 			CREATE TABLE pythobb_user_data2 (uid int, email text, avatar text, usertitle text, gid int)
+			CREATE TABLE pythobb_thread_misc (pid int, likes int, views int, likedby text, title text)
 			"""
