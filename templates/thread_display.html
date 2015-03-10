@@ -1,0 +1,38 @@
+<html>
+	<head>
+		<title>{[forumname]}</title>
+		<link href="http://fonts.googleapis.com/css?family=Raleway:100" rel="stylesheet" type="text/css">
+		<link href="{[forumurl]}/css/global.css" rel="stylesheet" type="text/css">
+		<script src="{[forumurl]}/js/jquery.js"></script>
+		<script src="{[forumurl]}/js/global.js"></script>
+	</head>
+	<body>
+		<div id="back">
+			<a style="font-family: 'Raleway';color: #FFF;font-size: 30px;text-decoration: none;" href="{[forumurl]}">{[forumname]}</a>
+		</div>
+                <div id="lst-mnu">
+                	{[userblock]}
+		</div>
+		<div id="container">
+			<div id="inner-body">
+				<div class="thread-head">{[threadname]}{[newpost]}</div>
+				{[posts]}
+				<div class="makepost" style="display:none;">
+					<div class="abvpostopt">
+						<input type="text" class="title" value="RE: {[threadname]}">
+						<a href="javascript:;" style="float:right;border-left:1px solid #111;border-right:0;padding:10px 10px 11px 10px;" class="cancelpost">Cancel</a>
+					</div>
+					<textarea class="fieldtext"></textarea>
+					<div class="newpostopt">
+						<a href="javascript:;" class="post" style="float:right;border-right:0;border-left: 1px solid #111;margin-top:-10px;">Post</a>
+						<a href="javascript:;" class="b">Bold</a><a href="javascript:;" class="i">Italic</a><a href="javascript:;" class="img">Image</a>
+					</div>
+				</div>
+				<div class="thread-foot"></div>
+			</div>
+		</div>
+		<div id="cntr-foot">
+			Powered by PythoBB
+		</div>
+	</body>
+</html>
