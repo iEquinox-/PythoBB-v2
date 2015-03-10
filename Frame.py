@@ -179,3 +179,18 @@ class Base:
 				condit={"user":user_status,"sid_":sid},
 				fid = fid
 			), setCookies=None)
+			
+	def Thread(self, request, tid):
+		if request.COOKIES.has_key("sid"):
+			if(IDs.VerifySID(sid=request.COOKIES["sid"])==True):
+				user_status,sid = True,request.COOKIES["sid"]
+			else:
+				user_status,sid = False,None
+		else:
+			user_status,sid = False,None
+		return Render.Render()._Page(
+			content=Pages.Pages()._RenderThread(
+				content=Pages.Pages()._Render(name="thread_display"),
+				condit={"user":user_status,"sid_":sid},
+				tid = tid
+			), setCookies=None)
