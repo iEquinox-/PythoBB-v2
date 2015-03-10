@@ -63,19 +63,21 @@ div#cntr-foot {
 	text-align: right;
 	font-family: 'Raleway';
 	color: #FFF;
+	margin-bottom: 30px;
 }
 
-div#cat, div#forum {box-shadow:0 0 10px -2px #000;}
+div#cat, div#forum, div#thread {box-shadow:0 0 10px -2px #000;}
 div#cat.closed > div.catbody {display:none;}
 
 div.cname > a.togglecat[href="javascript:;"],
-div.forum-head > a {
+div.forum-head > a,
+div.thread-head > a {
 	float: right;
 	text-decoration: none;
 	color: #FFF;
 }
 
-div.cname, div.forum-head {
+div.cname, div.forum-head, div.thread-head {
 	background: linear-gradient(#111 -75%, #2ecc71 50%);
 	border: 1px solid #111;
 	padding: 10px;
@@ -87,7 +89,7 @@ div.cname, div.forum-head {
 	letter-spacing: 2px;
 }
 
-div.cbody, div.forum-body {
+div.cbody, div.forum-body, div.thread-body {
 	background: #222;
 	padding: 10px;
 	border: 1px solid #111;
@@ -98,15 +100,43 @@ div.cbody, div.forum-body {
 }
 
 div.forum-body > span {float:right;}
-div.forum-body a {text-decoration: none;color: #FFF}
+div.forum-body a,
+div.thread-body a {text-decoration: none;color: #FFF}
 div.cbody > a {font-family:inherit;color:inherit;text-decoration: none;}
 
-div.cfoot, div.forum-foot {
+div.cfoot, div.forum-foot, div.thread-foot {
 	padding: 15px 10px;
 	background: linear-gradient(#2ecc71 50%,#111 175%);
 	border: 1px solid #111;
 	border-top: none;
 	border-radius: 0 0 3px 3px;
+}
+
+div.post {
+	background: #222;
+	border: 1px solid #111;
+	border-top: 0;
+	padding: 10px;
+	box-shadow: inset 0 -10px 10px -10px #2eec71, inset 0 10px 10px -10px #2eec71;
+	font-family: 'Raleway';
+	color: #FFF;
+	font-size: 15px;
+}
+
+div.post > table > tbody > tr > td {
+	vertical-align: top;
+	padding: 10px;
+	font-size: 15px;
+	color: #FFF;
+}
+
+div.post > table {width: 100%;}
+div.post > table > tbody > tr > td.user-cont {border-right:1px solid #111;text-align: center;width: 15%;}
+div.post > table > tbody > tr > td.post-cont {width: 55%;}
+
+div.post > div.post-opt {
+	padding: 5px 0 0 0;
+	border-top: 1px solid #111
 }
 
 div#alert {
@@ -359,4 +389,91 @@ div.follow-head > div.result {
 div.follow-head > div.result:last-child {
 	border-radius: 0 0 3px 3px;
 	margin: 0 0 5px 0;
+}
+
+div.post-opt > a {
+	background: linear-gradient(#111 -75%, #333 50%, #111 175%);
+	padding: 10px;
+	border-radius: 2px;
+	border: 1px solid #111;
+	color: #2eec71;
+	text-decoration: none;
+	text-shadow:0 0 0;
+	font-size: 12px;
+	margin-right: 5px;
+}
+
+div.post-opt > a.counter-p1 {
+	border-radius: 2px 0 0 2px;
+	margin-right: 0;
+}
+
+div.post-opt > div.counter-p2 {
+	display: inline-block;
+	background: linear-gradient(#2ecc71 50%,#111 175%);
+	color: #FFF;
+	text-shadow: 0 0 0;
+	font-size: 12px;
+	padding: 10px;
+	border-radius: 0 2px 2px 0;
+	border: 1px solid #111;
+	border-left: 0;
+	margin-right: 5px;
+}
+
+div.makepost {
+	padding: 10px;
+	background: #222;
+	border: 1px solid #111;
+	border-top: 0;
+}
+
+div.abvpostopt {
+	border: 1px solid #111;
+	border-bottom: 0;
+	border-radius: 3px 3px 0 0;
+}
+
+div.abvpostopt > input.title {
+	padding: 12px 10px;
+	background: #222;
+	border: 0;
+	border-right: 1px solid #111;
+	outline: none;
+	width: 185px;
+	color: #FFF;
+	font-family: 'Raleway';
+	text-shadow: 0 0 0;
+}
+
+textarea.fieldtext {
+	outline: none;
+	padding: 10px;
+	border-radius: 0;
+	color: #FFF;
+	font-family: 'Raleway';
+	font-size: 15px;
+	border: 1px solid #111;
+	background: #222;
+	max-width: 100%;
+	min-width: 100%;
+	max-height: 100px;
+	min-height: 100px;
+}
+
+div.newpostopt {
+	padding: 10px 0;
+	border: 1px solid #111;
+	border-top: 0;
+	border-radius: 0 0 3px 3px;
+}
+
+div.newpostopt > a,
+div.abvpostopt > a {
+	padding: 10px 10px;
+	border-right: 1px solid #111;
+	color: #FFF;
+	text-decoration: none;
+	font-family: 'Raleway';
+	background: linear-gradient(#111 -75%, #333 50%, #111 175%);
 }
