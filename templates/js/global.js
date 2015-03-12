@@ -8,7 +8,11 @@ jQuery(document).ready(function($){
 		
 	function doRedirect(directory, time) {
 		setTimeout(function(){
-			location.href = url + directory
+			if( directory == "!" ) {
+				location.reload();
+			} else {
+				location.href = url + directory;
+			}
 		}, time);
 	}
 		
@@ -83,7 +87,7 @@ jQuery(document).ready(function($){
 			$("html,body").animate({scrollTop: $("div.makepost").offset().top },500);
 		} else {
 			$("div.makepost").slideUp(500);
-			$("html,body").animate({scrollTop: 0 },500);
+			// $("html,body").animate({scrollTop: 0 },500);
 		}
 	}
 	
@@ -101,7 +105,7 @@ jQuery(document).ready(function($){
 		event.preventDefault();
 		if( $("input.form-optional.usertitle").val() != "" || $("input.form-optional.avatar").val() != "" ) {
 			var action = $(this).attr("action");
-			$.ajax({type:"POST", url:action, data: {
+			$.ajax({type:"GET", url:action, data: {
 					csrfmiddlewaretoken:getCookie("csrftoken"),
 					Usertitle: $("input.form-optional.usertitle").val(),
 					AvatarURL: $("input.form-optional.avatar").val()
@@ -258,7 +262,32 @@ jQuery(document).ready(function($){
 		} else if ( cl == "img") {
 			$("div.makepost>textarea").val(  pre + " [img]Image url[/img] " )
 		} else if ( cl == "post" ) {
-			/* TO BE COMPLETED */
+			if( $("div.makepost>textarea").val().length >= 25 ) {
+				$.ajax({type:"POST", url:url+"/action/", data: {
+					csrfmiddlewaretoken:getCookie("csrftoken"),
+					action:"post",
+					sid:getCookie("sid"),
+					tid:$("div.makepost").attr("id").substring(4,5),
+					content:$("div.makepost>textarea").val(),
+					posttitle:$("div.abvpostopt>input.title").val()
+					}, dataType:"json",
+					success: function (data) {
+						if( data.Posted == true ){
+							SendAlert("Posted reply.");
+							doRedirect("!", 1000);
+						} else {
+							SendAlert(data.Posted[1]);
+						}
+					},
+					error: function(jqXHR, textStatus, error) {
+						SendAlert("An error has occured. Please contact the forum administrator.");
+						console.log(textStatus);
+						console.log(error);
+					}
+				});
+			} else {
+				SendAlert("Your post does not meet the 25 character length standard.");
+			}
 		}
 	});
 	
