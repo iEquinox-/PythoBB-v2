@@ -225,7 +225,7 @@ jQuery(document).ready(function($){
 	});
 	
 	$("a[href='javascript:;'].Like").on("click", function(){
-		act = $(this).attr("id").substring(4,5),
+		act = $(this).attr("id").substring(4),
 			counter = $(this).parent().children(".counter-p2"),
 			likes   = parseInt(counter.text());
 		$.ajax({type:"POST", url:url+"/action/", data:{
@@ -292,7 +292,7 @@ jQuery(document).ready(function($){
 	});
 	
 	$("div.post-opt > a[href='javascript:;'].Quote").on("click", function(){
-		pid = $(this).attr("id").substring(4,5);
+		pid = $(this).attr("id").substring(4);
 		if( $("div.makepost").css("display") != "block" ) {
 			pullPost();
 		}
