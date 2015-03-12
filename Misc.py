@@ -1,4 +1,4 @@
-import types,Render,Database,Settings,Pages,IDs
+import types,re,Render,Database,Settings,Pages,IDs,Security
 
 class Search():
 	def __init__(self):
@@ -82,7 +82,7 @@ class Statistics():
 			
 class Actions():
 	def __init__(self):
-		self.actions = ["like", "view"]
+		self.actions = ["like", "view", "post"]
 		
 	def Action(self, request):
 		if request.POST["action"] in self.actions:
@@ -90,8 +90,55 @@ class Actions():
 				if request.POST["action"] == "like":
 					uid = Database.Database().Execute(query="SELECT * FROM pythobb_user_data WHERE sessionid=?", variables=(request.POST["sid"],), commit=False, doReturn=True)[0][0]
 					JSON = Statistics().Like(pid=request.POST["pid"], uid=uid)
+				elif request.POST["action"] == "post":
+					try:
+						post = {
+							"content": Security.Security()._Parse(content=request.POST["content"])["MSG"],
+							"title": Security.Security()._Parse(content=request.POST["posttitle"])["MSG"]
+						}
+						uid = Database.Database().Execute(query="SELECT * FROM pythobb_user_data WHERE sessionid=?", variables=(request.POST["sid"],), commit=False, doReturn=True)[0][0]
+						pid = IDs.Values()._PID
+						Database.Database().Execute(query="INSERT INTO pythobb_posts VALUES (?,?,?,?)", variables=(pid, request.POST["tid"], post["content"], uid), commit=True, doReturn=False)
+						Database.Database().Execute(query="INSERT INTO pythobb_thread_misc VALUES (?,?,?,?,?)", variables=(pid, 0,0, "", post["title"]), commit=True, doReturn=False)
+						JSON = Render.Render()._Page(content=Render.Render()._JSON(variable="Posted", boolean=True, data=None, complete=True), setCookies=None, setContentType="application/json")
+					except Exception as e:
+						JSON = Render.Render()._Page(content=Render.Render()._JSON(variable="Posted", boolean=None, data=[False, "An error occured."], complete=True), setCookies=None, setContentType="application/json")
 			else:
 				JSON = Render.Render()._Page(content=Render.Render()._JSON(variable="Error", boolean=None, data="Insufficient permissions.", complete=True), setCookies=None, setContentType="application/json")
 		else:
 			JSON = Render.Render()._Page(content=Render.Render()._JSON(variable="Error", boolean=None, data="Invalid action.", complete=True), setCookies=None, setContentType="application/json")
 		return JSON
+
+class PBBCode():
+	def __init__(self):
+		self.nodtags = {"b":"strong", "i":"em"}
+		self.spctags = ["img","quote"]
+		self._Parse  = self.doPBBParsing
+
+	def doPBBParsing(self, content=None):
+		def getText(pid=0):
+			posts = Database.Database().Execute(query="SELECT * FROM pythobb_posts WHERE pid=?", variables=(pid,), commit=False, doReturn=True)[0]
+			if len(posts) != 0:
+				text,user = posts[2],posts[3]
+				user = Database.Database().Execute(query="SELECT * FROM pythobb_users WHERE uid=?", variables=(user,), commit=False, doReturn=True)[0][1]
+			else:
+				threads = Database.Database().Execute(query="SELECT * FROM pythobb_threads WHERE cinf LIKE ?", variables=("%:"+str(pid),), commit=False, doReturn=True)[0]
+				if len(threads) != 0:
+					text = threads[4]
+					user = threads[5].split(":")[0]
+			return [user,text]
+		regex = re.findall("\[(.+?)\](.*?)\[/?(.+?)\]", content)
+		rege2 = re.findall("""\[(quote)="([0-9])"\]""", content, re.IGNORECASE)
+		print rege2
+		for cond in [[c[0],c[1]] for c in regex]:
+			if cond[0] in self.nodtags:
+				content = content.replace("[%s]%s[/%s]"%(cond[0],cond[1],cond[0]), "<%s>%s</%s>"%(self.nodtags[cond[0]],cond[1],self.nodtags[cond[0]]))
+			else:
+				if cond[0] in self.spctags:
+					if cond[0] == "img":
+						content = content.replace("[img]%s[/img]"%(cond[1]), "<img src=\"%s\">"%(cond[1]))
+		for quote in rege2:
+			textINF = getText(pid=quote[1])
+			content = content.replace("[%s=\"%s\"]"%(quote[0],quote[1]), "<div class=\"quote-block\"><div class=\"user-said\">%s said:</div>%s</div><br/>"%( textINF[0], self.doPBBParsing(content=textINF[1]) ))
+		return content
+		
