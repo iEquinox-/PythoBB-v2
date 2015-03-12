@@ -6,22 +6,23 @@ class Pages():
 		self._CSS     = self.RenderCSS
 		self._JS      = self.RenderJS
 		self.pageKeys = {
-			"index":                "index",
-			"userblock_guest":      "userblock_guest",
-			"userblock_user":       "userblock_user",
-			"cat_display":          "cat_display",
-			"cat_display_forum":    "cat_display_forum",
-			"user_login_page":      "user_login_page",
-			"user_register_page":   "user_register_page",
-			"user_profile":         "user_profile",
-			"user_profile_content": "user_profile_content",
-			"user_controlpanel":    "user_controlpanel",
-			"searchbox":            "searchbox",
-			"search_results":       "search_results",
-			"forum_display":        "forum_display",
-			"forum_display_forum":  "forum_display_forum",
-			"thread_display":       "thread_display",
-			"post_display":         "thread_display_post",
+			"index":                  "index",
+			"userblock_guest":        "userblock_guest",
+			"userblock_user":         "userblock_user",
+			"cat_display":            "cat_display",
+			"cat_display_forum":      "cat_display_forum",
+			"user_login_page":        "user_login_page",
+			"user_register_page":     "user_register_page",
+			"user_profile":           "user_profile",
+			"user_profile_content":   "user_profile_content",
+			"user_controlpanel":      "user_controlpanel",
+			"searchbox":              "searchbox",
+			"search_results":         "search_results",
+			"forum_display":          "forum_display",
+			"forum_display_forum":    "forum_display_forum",
+			"thread_display":         "thread_display",
+			"post_display":           "thread_display_post",
+			"thread_display_newpost": "thread_display_newpost",
 			}
 		
 	def OpenPage(self, name=None):
@@ -67,7 +68,8 @@ class Pages():
 		if sid != "":
 			if not isinstance(sid, types.NoneType):
 				ub = self._Render(name="userblock_user")
-				us = Database.Database().Execute(query="SELECT * FROM pythobb_users WHERE uid=?", variables=(Database.Database().Execute(query="SELECT * FROM pythobb_user_data WHERE sessionid=?", variables=(sid,), commit=False, doReturn=True)[0][0],), commit=False, doReturn=True)[0]
+				uid = Database.Database().Execute(query="SELECT * FROM pythobb_user_data WHERE sessionid=?", variables=(sid,), commit=False, doReturn=True)[0][0]
+				us = Database.Database().Execute(query="SELECT * FROM pythobb_users WHERE uid=?", variables=(uid,), commit=False, doReturn=True)[0]
 				return ub.replace("{[uid]}", str(us[0])).replace("{[username]}", us[1]).replace("{[searchbox]}", self._Render(name="searchbox"))
 		else:
 			return self._Render(name="userblock_guest").replace("{[searchbox]}", self._Render(name="searchbox"))
@@ -162,13 +164,16 @@ class Pages():
 			return Database.Database().Execute(query="SELECT * FROM pythobb_threads WHERE tid=?", variables=(tid,), commit=False, doReturn=True)[0][2]
 		page = self._FullRender(content=content, condit=condit)
 		if condit["user"] == True:
-			newpost = """<a href="javascript:;" class="makenewpost">New Post</a>"""
+			newpost    = """<a href="javascript:;" class="makenewpost">New Post</a>"""
+			newpostbox = self._Render(name="thread_display_newpost")
 		else:
-			newpost = ""
-		page = page.replace("{[threadname]}", getThreadName(tid=tid)).replace("{[newpost]}", newpost)
-		return Render.Render()._Page(content=page.replace("{[posts]}", self._RenderPosts(tid=tid)), setCookies=None)
+			newpost    = ""
+			newpostbox = ""
+		page = page.replace("{[newpost->newpost]}", newpostbox)
+		page = page.replace("{[threadname]}", getThreadName(tid=tid)).replace("{[newpost]}", newpost).replace("{[tid]}", str(tid))
+		return Render.Render()._Page(content=page.replace("{[posts]}", self._RenderPosts(tid=tid, loggedin=condit["user"])), setCookies=None)
 		
-	def _RenderPosts(self, tid=0):
+	def _RenderPosts(self, tid=0, loggedin=False):
 		parent_Post = Database.Database().Execute(query="SELECT * FROM pythobb_threads WHERE tid=?", variables=(tid,), commit=False, doReturn=True)[0]
 		pPost = {"post": parent_Post[4], "poster": parent_Post[5].split(":")[0]}
 		posts       = Database.Database().Execute(query="SELECT * FROM pythobb_posts WHERE parent=?", variables=(tid,), commit=False, doReturn=True)
@@ -182,22 +187,41 @@ class Pages():
 		).replace(
 			"{[content]}", pPost["post"]
 		).replace(
-			"{[postoptions]}", self._PostOpt(pid=pid)
+			"{[postoptions]}", self._PostOpt(pid=pid, loggedin=loggedin)
 		).replace(
 			"{[useravatar]}", getAvatar
 		)
+		def getUser(uid=None):
+			return str(Database.Database().Execute(query="SELECT * FROM pythobb_users WHERE uid=?", variables=(uid,), commit=False, doReturn=True)[0][1])
+		for c in posts:
+			avatar = Database.Database().Execute(query="SELECT * FROM pythobb_user_data2 WHERE uid=?", variables=(c[3],), commit=False, doReturn=True)[0][2]
+			if avatar != "":
+				avatar = "<br/><img src=\"" + avatar + "\" class=\"userimg\" style=\"height:75px;width:75px;margin-top:10px;\">"
+			post_String += self._Render(name="post_display").replace(
+				"{[username]}", getUser(uid=c[3])
+			).replace(
+				"{[content]}", Misc.PBBCode()._Parse(content=c[2])
+			).replace(
+				"{[postoptions]}", self._PostOpt(pid=c[0], loggedin=loggedin)
+			).replace(
+				"{[useravatar]}", avatar
+			)
+			
 		return post_String
 		
-	def _PostOpt(self, pid):
-		links = {"Quote": ["javascript:;"], "Like":["javascript:;","counter-p1","<div class=\"counter-p2\">%s</div>"]}; link  = ""
-		def getLikes(pid=0):
-			num = Database.Database().Execute(query="SELECT likes FROM pythobb_thread_misc WHERE pid=?", variables=(pid,), commit=False, doReturn=True)[0]
-			print str(num)
-			return num[0]
-		for c in links:
-			if c == "Like":
-				extra = [links["Like"][1], links["Like"][2]%(str(getLikes(pid=pid)))]
-			else:
-				extra = ["",""]
-			link += "<a href=\"{0}\" id=\"pid-{2}\" class=\"{1} {3}\">{1}</a>{4}".format(links[c][0], c, str(pid), extra[0], extra[1])
-		return link
+	def _PostOpt(self, pid, loggedin=False):
+		if(loggedin == True):
+			links = {"Quote": ["javascript:;"], "Like":["javascript:;","counter-p1","<div class=\"counter-p2\">%s</div>"]}; link  = ""
+			def getLikes(pid=0):
+				num = Database.Database().Execute(query="SELECT likes FROM pythobb_thread_misc WHERE pid=?", variables=(pid,), commit=False, doReturn=True)[0]
+				print num
+				return num[0]
+			for c in links:
+				if c == "Like":
+					extra = [links["Like"][1], links["Like"][2]%(str(getLikes(pid=pid)))]
+				else:
+					extra = ["",""]
+				link += "<a href=\"{0}\" id=\"pid-{2}\" class=\"{1} {3}\">{1}</a>{4}".format(links[c][0], c, str(pid), extra[0], extra[1])
+			return link
+		else:
+			return ""
