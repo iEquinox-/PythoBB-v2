@@ -82,8 +82,10 @@ class Base:
 			"Password": request.POST["Password"],
 			"Email": request.POST["Email"]
 		}
-		_returnUserdata  = Database.Database().Execute(query="SELECT * FROM pythobb_users WHERE username=?", variables=(_RequestedData["Username"],) , commit=False, doReturn=True)
+		_returnUserdata  = Database.Database().Execute(query="SELECT * FROM pythobb_users WHERE username=?", variables=(_RequestedData["Username"]["MSG"],) , commit=False, doReturn=True)
+		print _RequestedData
 		_returnEmaildata = Database.Database().Execute(query="SELECT * FROM pythobb_user_data2 WHERE email=?", variables=(_RequestedData["Email"],) , commit=False, doReturn=True)
+		print _returnUserdata
 		if( len(_returnUserdata) > 0 ):
 			returnVars = None
 			returnString = "Username is already taken."
@@ -97,7 +99,7 @@ class Base:
 		else:
 			uid,saltGen,Token = IDs.Values()._UID,Security.Security()._Salt,Security.Security()._TID
 			try:
-				Database.Database().Execute(query="INSERT INTO pythobb_users VALUES (?,?,?,?)", variables=( uid, _RequestedData["Username"], saltGen, Security.Security()._Hash(verify=False, string=str(saltGen + _RequestedData["Password"]) , hash=None )), commit=True, doReturn=False)
+				Database.Database().Execute(query="INSERT INTO pythobb_users VALUES (?,?,?,?)", variables=( uid, _RequestedData["Username"]["MSG"], saltGen, Security.Security()._Hash(verify=False, string=str(_RequestedData["Password"]+saltGen) , hash=None )), commit=True, doReturn=False)
 				Database.Database().Execute(query="INSERT INTO pythobb_user_data VALUES (?,?,?)", variables=(uid, Token, IPADDR,), commit=True, doReturn=False)
 				Database.Database().Execute(query="INSERT INTO pythobb_user_data2 VALUES (?,?,?,?,?)", variables=(uid, _RequestedData["Email"], "", "Default user", 2), commit=True, doReturn=False)
 				returnVars = {"message": "Registration successful. Redirecting.", "register":True, "sid":Token}
