@@ -6,6 +6,14 @@
 # (default) will have administrator permissions.
 
 Groups = {
-		1: {"Name": "Administrator", "Description":"Site administrator."},
-		2: {"Name": "Default user", "Description":"Forum member"}
+		1: {
+			"Name":        "Administrator",
+			"Description": "Site administrator.",
+			"Style":       "color:#F00;text-shadow:0 0 5px #EE3535;"
+		},
+		2: {
+			"Name":        "Default user",
+			"Description": "Forum member",
+			"Style":       ""
+		}
 	}
