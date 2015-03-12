@@ -77,6 +77,15 @@ div.thread-head > a {
 	color: #FFF;
 }
 
+div.thread-foot > a {
+	text-decoration: none;
+	color: #FFF;
+	font-family: droid sans, sans-serif;
+	font-size: 15px;
+	text-transform: uppercase;
+	letter-spacing: 2px;
+}
+
 div.cname, div.forum-head, div.thread-head {
 	background: linear-gradient(#111 -75%, #2ecc71 50%);
 	border: 1px solid #111;
@@ -111,6 +120,8 @@ div.cfoot, div.forum-foot, div.thread-foot {
 	border-top: none;
 	border-radius: 0 0 3px 3px;
 }
+
+div.thread-foot {text-align: right;padding:10px 10px;}
 
 div.post {
 	background: #222;
@@ -476,4 +487,17 @@ div.abvpostopt > a {
 	text-decoration: none;
 	font-family: 'Raleway';
 	background: linear-gradient(#111 -75%, #333 50%, #111 175%);
+}
+
+div.quote-block {
+	background: #333;
+	padding: 10px;
+	border-left: 1px solid #222;
+	border-bottom: 1px solid #222;
+}
+
+div.quote-block > div.user-said {
+	padding: 0 0 5px 0;
+	border-bottom: 1px solid #222;
+	margin-bottom: 5px;
 }
