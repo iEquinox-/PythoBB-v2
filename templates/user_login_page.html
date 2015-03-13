@@ -3,22 +3,23 @@
 		<title>{[forumname]}</title>
 		<link href="http://fonts.googleapis.com/css?family=Raleway:100" rel="stylesheet" type="text/css">
 		<link href="{[forumurl]}/css/global.css" rel="stylesheet" type="text/css">
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+		<script src="{[forumurl]}/js/jquery.js"></script>
 		<script src="{[forumurl]}/js/global.js"></script>
 	</head>
 	<body>
 		<div id="back">
-			<span style="font-family: 'Raleway';color: #FFF;font-size: 30px;">PythoBB v2</span>
+			<a style="font-family: 'Raleway';color: #FFF;font-size: 30px;text-decoration: none;" href="{[forumurl]}">{[forumname]}</a>
 		</div>
                 <div id="lst-mnu">
                 	{[userblock]}
 		</div>
 		<div id="container">
 			<div id="inner-body">
-				<form class="state-form" action="/login/_login/" method="post">
+				<form class="state-form login" action="/login/_login/" method="post" autocomplete="off">
+					<input type="hidden" name="csrfmiddlewaretoken" class="CSRFToken" value="None">
 					<div>
 						<div class="required-field username">Username</div>
-						<input type="text" name="Username" class="required username">
+						<input type="text" name="Username" maxlength="25" class="required username">
 					</div><br/><br/>
 					<div>
 						<div class="required-field password">Password</div>
@@ -28,8 +29,6 @@
 				</form>
 			</div>
 		</div>
-		<div id="cntr-foot">
-			Powered by PythoBB
-		</div>
+		<div id="cntr-foot">Powered by PythoBB</div>
 	</body>
 </html>
